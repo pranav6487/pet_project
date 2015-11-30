@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/mobi-shopping/!svn/ver/26/mobishop/includes/pages/shop
+END
+cart.tpl.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/mobi-shopping/!svn/ver/26/mobishop/includes/pages/shop/cart.tpl.php
+END
+shop.tpl.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/mobi-shopping/!svn/ver/26/mobishop/includes/pages/shop/shop.tpl.php
+END
+order.tpl.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/mobi-shopping/!svn/ver/26/mobishop/includes/pages/shop/order.tpl.php
+END
+cart_init.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/mobi-shopping/!svn/ver/68/mobishop/includes/pages/shop/cart_init.php
+END
+shop_init.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/mobi-shopping/!svn/ver/68/mobishop/includes/pages/shop/shop_init.php
+END
+order_init.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/mobi-shopping/!svn/ver/68/mobishop/includes/pages/shop/order_init.php
+END

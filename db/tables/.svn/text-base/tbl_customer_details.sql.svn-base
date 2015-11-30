@@ -1,0 +1,14 @@
+DROP TABLE IF EXISTS tbl_customer_details;
+CREATE TABLE tbl_customer_details
+(
+  cust_id INT(10) UNSIGNED NOT NULL auto_increment,
+  cust_name VARCHAR(255) NOT NULL,
+  cust_no VARCHAR(255) NOT NULL,
+  cust_add VARCHAR(255) NOT NULL,
+  cust_pincode VARCHAR(255) NOT NULL,
+  cust_email VARCHAR(255) NOT NULL,
+  last_visit timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  creation_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (cust_id),
+  UNIQUE KEY cust_id (cust_id)
+);

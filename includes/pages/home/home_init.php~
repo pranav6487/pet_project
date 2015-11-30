@@ -1,0 +1,13 @@
+<?php
+echo "home init page<br />";
+
+global $global_params;
+global $page_params;
+
+p($global_params);
+$page_params['css'] = array();
+array_push($page_params['css'],'test.css');
+
+$page_params['js'] = array();
+array_push($page_params['js'],'test.js');
+?>

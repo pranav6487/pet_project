@@ -1,0 +1,50 @@
+-- DO NOT USE THIS TABLE STRUCT
+DROP TABLE IF EXISTS tbl_product_master;
+CREATE TABLE tbl_product_master
+(
+  product_id INT(10) UNSIGNED NOT NULL auto_increment,
+  brand_id INT(10) UNSIGNED NOT NULL,
+  category_id INT(10) UNSIGNED NOT NULL,
+  pd_name VARCHAR(255) DEFAULT NULL,
+  pd_desc VARCHAR(255) DEFAULT NULL,
+  quant_per_unit INT(10) UNSIGNED DEFAULT NULL,
+  unit_prize DECIMAL(20,10) UNSIGNED DEFAULT 0.0000000000,
+  mrp DECIMAL(20,10) UNSIGNED DEFAULT 0.0000000000,
+  discount DECIMAL(5,2) UNSIGNED DEFAULT 0.00,
+  unit_instock INT(10) UNSIGNED DEFAULT NULL,
+  unit_on_order SMALLINT(5) UNSIGNED DEFAULT NULL,
+  reorder_level SMALLINT(5) UNSIGNED DEFAULT NULL,
+  pd_available TINYINT(3) UNSIGNED DEFAULT NULL,
+  disc_available TINYINT(3) UNSIGNED DEFAULT NULL,
+  note VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (product_id),
+  UNIQUE KEY product_id (product_id)
+);
+
+-- 16th June 2012
+-- THIS TABLE STRUCT IS TO BE USED
+DROP TABLE IF EXISTS tbl_product_master;
+CREATE TABLE tbl_product_master
+(
+  product_id INT(10) UNSIGNED NOT NULL auto_increment,
+  brand_id INT(10) UNSIGNED NOT NULL,
+  category_id INT(10) UNSIGNED NOT NULL,
+  pd_name VARCHAR(255) DEFAULT NULL,
+  pd_desc VARCHAR(255) DEFAULT NULL,
+  unit_instock INT(10) UNSIGNED DEFAULT NULL,
+  unit_on_order SMALLINT(5) UNSIGNED DEFAULT NULL,
+  reorder_level SMALLINT(5) UNSIGNED DEFAULT NULL,
+  pd_available TINYINT(3) UNSIGNED DEFAULT NULL,
+  disc_available TINYINT(3) UNSIGNED DEFAULT NULL,
+  note VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (product_id),
+  UNIQUE KEY product_id (product_id)
+);
+
+insert into tbl_product_master (brand_id,category_id,pd_name,pd_desc) values (1,1,'Parle G','Parle G bisucits: Best biscuits');
+
+insert into tbl_product_master (brand_id,category_id,pd_name,pd_desc) values (1,2,'Arrow','The perfect shirt');
+
+insert into tbl_product_master (brand_id,category_id,pd_name,pd_desc) values (1,1,'Red Bull','Red Bull gives you wings');
+
+insert into tbl_product_master (brand_id,category_id,pd_name,pd_desc) values (1,3,'Blackberry Torch','Best touch screen Blackberry');

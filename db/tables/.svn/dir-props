@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 188
+.tbl_restaurant_dtls.sql.kate-swp
+.tbl_table_dtls.sql.kate-swp
+.tbl_party_rest_relation.sql.kate-swp
+.tbl_users.sql.kate-swp
+.tbl_booking_dtls.sql.kate-swp
+.tbl_customer_dtls.sql.kate-swp
+
+END

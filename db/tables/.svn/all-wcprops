@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/mobi-shopping/!svn/ver/8/mobishop/db/tables
+END
+tbl_category_dtl.sql
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/mobi-shopping/!svn/ver/8/mobishop/db/tables/tbl_category_dtl.sql
+END
+tbl_order_details.sql
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/mobi-shopping/!svn/ver/8/mobishop/db/tables/tbl_order_details.sql
+END
+tbl_product_details.sql
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/mobi-shopping/!svn/ver/8/mobishop/db/tables/tbl_product_details.sql
+END
+tbl_customer_details.sql
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/mobi-shopping/!svn/ver/8/mobishop/db/tables/tbl_customer_details.sql
+END
+tbl_order_master.sql
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/mobi-shopping/!svn/ver/8/mobishop/db/tables/tbl_order_master.sql
+END
+tbl_brand_details.sql
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/mobi-shopping/!svn/ver/8/mobishop/db/tables/tbl_brand_details.sql
+END
+tbl_product_master.sql
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/mobi-shopping/!svn/ver/8/mobishop/db/tables/tbl_product_master.sql
+END

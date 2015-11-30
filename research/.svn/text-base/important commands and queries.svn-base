@@ -1,0 +1,128 @@
+IMPORTANT COMMANDS AND QUERIES
+
+==========================================================================================================
+SVN Setup
+1) make dir in /home called as svn/midas/ari/admin-web
+2) Goto kdesvn
+	- > click on chekout repository
+	- >Enter Source URL = http://svn.india.hostway/midas/ari/admin-web
+	-> Enter Target Dir /home/manojkumar/svn/midas/ari
+3)ln -s /home/manojkumar/svn/ /usr/local/apache/htdocs/
+ 
+4)vi /usr/local/apache/conf/httpd.conf
+	- > change AllowOverride from None to All
+5) create midas.conf
+	- > vi /usr/local/apache/conf/midas.conf
+	-> 
+		# Midas Reporting Interface
+		<VirtualHost 10.90.15.84>
+			ServerName dm.admin-manojkumar-midasreports.com
+		        DirectoryIndex  index.php index.html
+		        DocumentRoot /usr/local/apache/htdocs/svn/midas/ari/admin-web
+		</VirtualHost>
+
+6) Include midas.conf into http.conf
+	-> Include conf/midas.conf
+
+7) Make host entry
+	-> vi /etc/hosts
+	-> 10.90.15.84     dm.admin-manojkumar-midasreports.com
+
+8) Restart apache
+	- > /usr/local/apache/bin/apachectl stop
+	- > /usr/local/apache/bin/apachectl configtest
+	- > /usr/local/apache/bin/apachectl start
+	
+9) Change /admin-web/includes/config/acl.inc.php
+	-> Use sp_ari_access_new instead of sp_ari_access
+
+10) Chaneg /admin-web/includes/config/config.inc.php
+	- > Disable all live server constants & make enable local constants
+	Copy paste the contents from the same file on another local system to this file
+=========================================================================================================
+
+==========================================================================================================
+Cookie params to show debug info div
+?de=1&df=10hwwhk8dewrug39
+==========================================================================================================
+
+===========================================================================================================
+Run this command on your terminal to see the history of past days, when your system was booted and shutdown
+last_reboot
+
+========================================================================================================
+Steps to scp table
+
+1. show variables like 'datadir';
+2. \! sh
+3. cd (result of show variables like 'datadir';)/db_name
+4. ls tablename.*
+5. scp tablename.* root@dest_ip:/var/tmp
+6. Login to dest_ip
+7. Login to db
+8. show variables like 'datadir';
+9. \! sh
+10. Go to /var/tmp
+11. ls tablename.*
+12. mv tablename.* (result of show variables like 'datadir';)/db_name
+13. cd (result of show variables like 'datadir';)/db_name
+14. chmod 660 tablename.*
+15. chown mysql.mysql tablename.*
+
+=============================================================================================================
+
+==============================================================================================================
+ALter table query
+
+alter table xs_provider_group_audit_method_details drop column provide_name_column,add column provider_name_column varchar(32) DEFAULT NULL after sub_pr_name_column;
+
+===============================================================================================================
+Outfile Query
+
+set @query3 = CONCAT
+  (
+  'SELECT day_id,',@output_main_cols,@output_metric_cols,@var_conversion_select,' FROM ax_report_dump_tmp GROUP BY day_id,',arg_main_cols,' INTO OUTFILE "',@outfile_path,'" FIELDS TERMINATED BY "," OPTIONALLY ENCLOSED BY \'"\' LINES TERMINATED BY "\n" ');
+
+OUTFILE WITH COL HEADER
+SELECT "day_id","total_campaigns","total_campaigns_active","total_campaigns_served","total_campaigns_spent","total_allowed_budget","total_allowed_budget_active","total_allowed_budget_served_campaign", "total_consumed_budget","total_balance_budget","no_of_overshoot_campaign","overshoot_campaign_amt"
+UNION ALL
+SELECT *
+FROM ax_budget_summary_april_2012 a
+INTO outfile '/var/tmp/april_2012_budget_summary.csv' fields terminated by ',' optionally enclosed by '"' lines terminated by '\n';
+===============================================================================================================
+
+================================================================================================================
+Generate RSA keys on server for SSH login without password
+@ source
+
+ssh-keygen -t dsa (algorithm name)
+cat /root/.ssh/id_dsa.pub
+
+@ destination
+
+copy pub key of source server
+vim /root/.ssh/authorized_keys
+==============================================================================================================
+
+==============================================================================================================
+To check if mysql is running
+ps aux | grep mysql
+
+Expected output
+
+root     24292  0.0  0.0   3952   664 ?        S    12:39   0:00 /bin/sh ./bin/mysqld_safe --defaults-file=/etc/mysql/my.cnf
+mysql    25758 27.3  2.9 190888 61976 ?        Sl   12:39   6:41 /usr/local/mysql-3306/bin/mysqld --defaults-file=/etc/mysql/my.cnf --basedir=/usr/local/mysql-3306/ --datadir=/var/lib/mysql-3306/data --plugin-dir=/usr/local/mysql-3306/lib/plugin --user=mysql --log-error=/var/lib/mysql-3306/data/xsp-repl-master-01.err --open-files-limit=5000 --pid-file=/var/lib/mysql-3306/data/mysqld.pid --socket=/tmp/mysql-3306.sock --port=3306
+root     28577  0.0  0.0   6028   708 pts/0    S+   13:03   0:00 grep mysql
+
+MYSQL start command
+/etc/init.d/mysql-3306 start
+==================================================================================================================
+
+===================================================================================================================
+Grant all priviliges to a mysql user
+
+grant all on db_name.* to ‘user_name’@localhost identified by ‘user_password’;
+grant all on mobi_shopping.* to ‘root’@localhost identified by ‘pranav6487’;
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+===================================================================================================================

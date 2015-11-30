@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS tbl_category_dtl;
+CREATE TABLE tbl_category_dtl
+(
+  category_id INT(10) UNSIGNED NOT NULL auto_increment,
+  category_name VARCHAR(255) DEFAULT NULL,
+  category_desc VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (category_id),
+  UNIQUE KEY category_id (category_id)
+);
+
+insert into tbl_category_dtl (category_name,category_desc) values ('Eatables','Food products');
+
+insert into tbl_category_dtl (category_name,category_desc) values ('Apparels','Clothing products');
+
+insert into tbl_category_dtl (category_name,category_desc) values ('Electronics','Mobiles Computers');
