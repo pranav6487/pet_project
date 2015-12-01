@@ -208,7 +208,7 @@ function refreshTableList() {
 function clearTable( tableNo ) {
     var confirmAction = confirm("You sure the party at table no "+tableNo+" is done?");
     if( confirmAction == true ) {
-        var params = "restId="+$("#restId").val()+"&tableNo="+tableNo+"&noOfPeople="+currTableList[tableNo]["noOfPeople"]+"&partyName="+currTableList[tableNo]["partyName"]+"&partyNum="+currTableList[tableNo]["partyNum"];
+        var params = "restId="+$("#restId").val()+"&tableNo="+tableNo+"&noOfPeople="+currTableList[tableNo]["noOfPeople"]+"&partyName="+currTableList[tableNo]["partyName"]+"&partyNum="+currTableList[tableNo]["partyNum"]+"&bkkId="+currTableList[tableNo]["bookingId"];
         currTableList[tableNo]["partyName"] = "";
         currTableList[tableNo]["partyNum"] = "";
         currTableList[tableNo]["seatTime"] = "";

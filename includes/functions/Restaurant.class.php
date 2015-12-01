@@ -1,11 +1,13 @@
 <?php
 class Restaurant {
     public $restObj;
+    //For DB
     const WAITING_STATUS = 1;
     const SEATED_STATUS = 2;
     const DONE_STATUS = 3;
     const REMOVED_FROM_WAIT_LIST = 4;
     const NO_RESULT_STATUS = 5;
+    //For Code
     const ALLOT_TABLE = 1;
     const ADD_TO_WAIT_LIST = 2;
     const EMPTY_TABLE = 3;
@@ -153,25 +155,32 @@ class Restaurant {
     public function saveBooking($pageArgs) {
         $return = array();
         $dbObj = new DbConnc(DB_URL);
+        
         //Get Customer Id
-        if( isset($pageArgs['partyName']) && isset($pageArgs['partyNum']) ) {
+        if( !empty($pageArgs['partyName']) && !empty($pageArgs['partyNum']) && !empty($pageArgs['restId']) && !empty($pageArgs['noOfPeople']) ) {
             $custName = $pageArgs['partyName'];
             $custNumber = $pageArgs['partyNum'];
             $custId = $this->getCustomerId($custName, $custNumber);
-        }
-        
+
         //Get Party rest relation id
-        $restId = $pageArgs['restId'];
-        $noOfPeople = $pageArgs['noOfPeople'];
-        $partyRelId = $this->getPartyRelId( $restId, $noOfPeople );
-        
+            $restId = $pageArgs['restId'];
+            $noOfPeople = $pageArgs['noOfPeople'];
+            $partyRelId = $this->getPartyRelId( $restId, $noOfPeople );
+        }
+        else {
+            //Figure our error handling
+        }
+
         //Get table id
         if( isset($pageArgs['tableNo']) && !empty($pageArgs['tableNo']) ) {
             $tableNo = $pageArgs['tableNo'];
             $tableDtls = $this->getTableDtls( $restId );
             $tableId = array_search($tableNo, $tableDtls);
         }
-        
+        else {
+            //Figure out error handling
+        }
+                
         $status = $pageArgs['status'];
         switch( $status ) {
             case self::ALLOT_TABLE:
@@ -208,12 +217,33 @@ class Restaurant {
                 break;
             
             case self::EMPTY_TABLE:
+               $emptyTableSql = "update tbl_booking_dtls set status = ".self::DONE_STATUS.", table_empty_time = ".time().", end_time = ".time()." where rest_id = ".$restId." and table_id = ".$tableId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId.";";
+                $dbObj->db_query($emptyTableSql);
+                
+                if( !empty($pageArgs['nextAvailableAt']) ) {
+                    $updateNextAvailSql = "update tbl_party_rest_relation set next_avail_at = ".$pageArgs['nextAvailableAt']." where rest_id = {$restId} and party_rel_id = {$partyRelId};";
+                    $dbObj->db_query($updateNextAvailSql);
+                }
                 break;
             
             case self::REMOVE_FROM_WAIT_LIST:
+                $removeFromWaitListSql = "update tbl_booking_dtls set status = ".self::REMOVED_FROM_WAIT_LIST.", end_time = ".time()." where rest_id = ".$restId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId.";";
+                $dbObj->db_query($removeFromWaitListSql);
+                
+                if( !empty($pageArgs['nextAvailableAt']) ) {
+                    $updateNextAvailSql = "update tbl_party_rest_relation set next_avail_at = ".$pageArgs['nextAvailableAt']." where rest_id = {$restId} and party_rel_id = {$partyRelId};";
+                    $dbObj->db_query($updateNextAvailSql);
+                }
                 break;
             
             case self::ALLOT_TABLE_FROM_WAIT_LIST:
+                $allotTableFromWaitListSql = "update tbl_booking_dtls set status = ".self::SEATED_STATUS.", seated_time = ".$pageArgs['seatedTime'].", estd_empty_time = ".$pageArgs['estdEndTime']." where rest_id = ".$restId." and table_id = ".$tableId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId;
+                $dbObj->db_query($allotTableFromWaitListSql);
+                
+                if( !empty($pageArgs['nextAvailableAt']) ) {
+                    $updateNextAvailSql = "update tbl_party_rest_relation set next_avail_at = ".$pageArgs['nextAvailableAt']." where rest_id = {$restId} and party_rel_id = {$partyRelId};";
+                    $dbObj->db_query($updateNextAvailSql);
+                }
                 break;
         }
         
