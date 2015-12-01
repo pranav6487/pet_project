@@ -64,7 +64,7 @@ class Restaurant {
     public function getCurrentBookingDtls($restId) {
         $dbObj = new DbConnc(DB_URL);
         $dayStartTime = strtotime(date('Y-m-d') . '10:00:00');
-        $currBookingSql = "select a.booking_id,a.table_id,a.party_rel_id,a.no_of_people,a.wait_list_time,a.seated_time,a.estd_empty_time,a.table_empty_time,b.customer_name,b.customer_number from tbl_booking_dtls as a inner join tbl_customer_dtls as b on b.customer_id = a.customer_id where (a.status = ".self::WAITING_STATUS." or a.status = ".self::SEATED_STATUS.") and a.start_time < ".time()." and a.start_time > ".$dayStartTime.";";
+        $currBookingSql = "select a.booking_id,a.table_id,a.party_rel_id,a.no_of_people,a.wait_list_time,a.seated_time,a.estd_empty_time,a.table_empty_time,a.status,b.customer_name,b.customer_number from tbl_booking_dtls as a inner join tbl_customer_dtls as b on b.customer_id = a.customer_id where (a.status = ".self::WAITING_STATUS." or a.status = ".self::SEATED_STATUS.") and a.start_time < ".time()." and a.start_time > ".$dayStartTime.";";
         $currBookingDtls = array();
         $waitListDtls = array();
         if( $dbObj->db_query($currBookingSql) ) {
