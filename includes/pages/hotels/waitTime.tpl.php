@@ -2,14 +2,12 @@
 global $global_params;
 global $page_params;
 ?>
-Implement condition for no of people in party more than 9<br />
-Option to put a customer on wait list and not allot a specific table - is it really needed?<br />
 <script type="text/javascript">
 var totalTables = <?php echo $totalTables; ?>;
 var avgTimeAtTable = <?php echo json_encode($avgTimeAtTable); ?>;
 var tableCapacity = <?php echo json_encode($tableCapacity); ?>;
 var currTableList = <?php echo json_encode($currTableList); ?>;
-var waitList = [];
+var waitList = <?php echo json_encode($waitList); ?>;
 var tableTurnTime = <?php echo json_encode($tableTurnTime); ?>;
 var bufferTime = <?php echo json_encode($bufferTime); ?>;
 var nextAvailableAt = <?php echo json_encode($nextAvailableAt); ?>;

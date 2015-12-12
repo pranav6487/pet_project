@@ -8,10 +8,11 @@ $restId = 2;
 $restObj = new Restaurant();
 $restDtls = $restObj->getRestaurantDtls( $restId );
 $currTableList = $restDtls['currTableList'];
-$waitList = $restDtls['waitListDtls'];
+$waitList = $restDtls['waitList'];
 $avgTimeAtTable = $restDtls['avgTimeAtTable'];
 $tableCapacity = $restDtls['tableCapacity'];
 $nextAvailableAt = $restDtls['nextAvailableAt'];
+$bufferTime = $restDtls['bufferTime'];
 $totalTables = 16;
 
 //$currTableList = array(
@@ -79,9 +80,11 @@ $totalTables = 16;
 //    
 //);
 ?>
-WaitList coming correctly from db, but not getting displayed<br />
-Verify current booking details correctly translating to JS variables<br />
-Check waitTime calculation for case Remove from wait list - Add to wait list<br />
-Javascript timer countdown for wait time<br />
-Javascript timer countup for table occupied time<br />
+Javascript timer count-down for wait time<br />
+Javascript timer count-up for table occupied time<br />
+Login control<br />
+Super admin and restaurant login differentiation<br />
+Manage page, to just view restaurant data<br />
+Contact page, to send mail<br />
 Case when noOfPeople is more than what is present for the restaurant<br />
+Option to put a customer on wait list and not allot a specific table - is it really needed?<br />

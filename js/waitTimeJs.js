@@ -269,8 +269,15 @@ function removeFromWaitList( index ) {
     }
 }
 
+function resetNextAvailableAt() {
+    for (var x in nextAvailableAt) {
+        nextAvailableAt[x] = 0;
+    }
+}
+
 function reCalculateWaitList() {
     var currDate = new Date();
+    resetNextAvailableAt();
     for ( var x in waitList ) {
         var currWait = waitList[x];
         var noOfPeople = currWait.noOfPeople;
@@ -293,19 +300,22 @@ function reCalculateWaitList() {
             nextAvailableAt[noOfPeople] = 0;
         }
         else {
-            endTime.sort(date_sort_asc);
-            if( currDate > endTime[0] ) {
-                var waitTime = bufferTime[noOfPeople];
-            }
-            else {
-                var diff = Math.abs( new Date(endTime[0]) - new Date(currDate) );
-                var waitTime = Math.round((diff/1000)/60);
-                if( nextAvailableAt[noOfPeople] == 0 || typeof nextAvailableAt[noOfPeople] === "undefined" ) {
-                    nextAvailableAt[noOfPeople] = addMinutes(currDate, avgTimeAtTable[noOfPeople]);
+            if( nextAvailableAt[noOfPeople] == 0 || typeof nextAvailableAt[noOfPeople] === "undefined" ) {
+                endTime.sort(date_sort_asc);
+                if( currDate > endTime[0] ) {
+                    var waitTime = bufferTime[noOfPeople];
+                    nextAvailableAt[noOfPeople] = 0;
                 }
                 else {
-                    nextAvailableAt[noOfPeople] = addMinutes(nextAvailableAt[noOfPeople], avgTimeAtTable[noOfPeople]);
+                    var diff = Math.abs( new Date(endTime[0]) - new Date(currDate) );
+                    var waitTime = Math.round((diff/1000)/60);
+                    nextAvailableAt[noOfPeople] = addMinutes(endTime[0], avgTimeAtTable[noOfPeople]);
                 }
+            }
+            else {
+                var diff = Math.abs( new Date(nextAvailableAt[noOfPeople]) - new Date(currDate) );
+                var waitTime = Math.round((diff/1000)/60);
+                nextAvailableAt[noOfPeople] = addMinutes(nextAvailableAt[noOfPeople], avgTimeAtTable[noOfPeople]);
             }
             currWait.tablesAvail = "";
             currWait.waitTime = waitTime;
