@@ -80,11 +80,12 @@ $totalTables = 16;
 //    
 //);
 ?>
-Javascript timer count-down for wait time<br />
-Javascript timer count-up for table occupied time<br />
-Login control<br />
+Change _init() function, place proper checks for URLs<br />
+Login and session control<br />
 Super admin and restaurant login differentiation<br />
 Manage page, to just view restaurant data<br />
 Contact page, to send mail<br />
+Javascript timer count-down for wait time<br />
+Javascript timer count-up for table occupied time<br />
 Case when noOfPeople is more than what is present for the restaurant<br />
 Option to put a customer on wait list and not allot a specific table - is it really needed?<br />
