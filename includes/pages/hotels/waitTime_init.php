@@ -80,7 +80,6 @@ $totalTables = 16;
 //    
 //);
 ?>
-Login class file and session control<br />
 Super admin and restaurant login differentiation<br />
 Manage page, to just view restaurant data<br />
 Contact page, to send mail<br />
