@@ -1,3 +1,5 @@
 <?php
-echo "init<br />";
+global $global_params;
+global $page_params;
+$page_params['page_title'] = "Login";
 ?>

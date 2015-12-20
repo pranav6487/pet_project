@@ -57,6 +57,9 @@ window.ALLOWED_DECIMAL_WITHOUT_HYPHEN=<?php echo ALLOWED_DECIMAL_WITHOUT_HYPHEN;
 </head>
 
 <body>
+    <?php
+    if( $global_params['page_arguments']['gtp'][0] != "login" ) {
+    ?>
 <!-- Header incl. Navigation & Search -->
 	<header>
 		<div class="wrap">
@@ -79,7 +82,7 @@ window.ALLOWED_DECIMAL_WITHOUT_HYPHEN=<?php echo ALLOWED_DECIMAL_WITHOUT_HYPHEN;
 			<li class="facebook"><a href="http://facebook.com/" title="Facebook">Facebook</a></li>
 		</ul>
 	</section>
-	
+    <?php } ?>
 	<section id="content">
 <?php 
 if(file_exists($tpl_path))

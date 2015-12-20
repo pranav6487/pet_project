@@ -92,31 +92,28 @@ function _init()
 	
 	//start session
 	make_session_active();
-	
-	if( !(isset($global_params['page_arguments']['gtp'])) || (count($global_params['page_arguments']['gtp']) == 0) )
-	{
-		header("location: ".HTTP_BASE_PATH."index.html");
-		exit;
-	}
-	elseif( count($global_params['page_arguments']['gtp'])==1 && $global_params['page_arguments']['gtp'][0] == "index")
-	{
-		$page_params['page_dir_file_name'] = "home/home";
-		//p($page_params); p($global_params);
-		header("location: ".HTTP_BASE_PATH.$page_params['page_dir_file_name'].".html");
-		exit;
-	}
-	elseif( count($global_params['page_arguments']['gtp']) == 1 && $global_params['page_arguments']['gtp'][0] == "404" )
-	{
-		//echo HTTP_BASE_PATH."404.html"; exit;
-		header("location: ".HTTP_BASE_PATH."404.html");
-		exit;
-	}
-	else
-	{
-		$page_params['page_dir_file_name'] = implode("/", $global_params['page_arguments']['gtp']);
-		$page_params['template'] = $global_params['template'];
-		//ppr($page_params); ppr($global_params); exit;
-	}
+	//isset($global_params['session_arguments']['userId']) && !empty($global_params['session_arguments']['userId'])
+        if( isset($global_params['session_arguments']['userId']) && !empty($global_params['session_arguments']['userId']) ) {
+            if( $global_params['page_arguments']['gtp'][0] == "login" ) {
+                $page_params['page_dir_file_name'] = "hotels/waitTime";
+                header("Location: ".HTTP_BASE_PATH.$page_params['page_dir_file_name'].".html");
+                exit;
+            }
+            else {
+                $page_params['page_dir_file_name'] = implode("/", $global_params['page_arguments']['gtp']);
+                $page_params['template'] = $global_params['template'];
+                //ppr($page_params); ppr($global_params); exit;
+            }
+        }
+        elseif( count($global_params['page_arguments']['gtp'])==1 && $global_params['page_arguments']['gtp'][0] == "login" ) {
+            $page_params['page_dir_file_name'] = implode("/", $global_params['page_arguments']['gtp']);
+            $page_params['template'] = $global_params['template'];
+            //ppr($page_params); ppr($global_params); exit;
+        }
+        else {
+            header("location: ".HTTP_BASE_PATH."login.html");
+            exit;
+        }
 }
 
 function display_template()
@@ -138,26 +135,26 @@ function display_template()
         }
 	elseif( validate_page_filepath() )
 	{
-		if( file_exists(TEMPLATE_DIR.$page_params['template'].".tpl.php"))
-		{
-			include (TEMPLATE_DIR.$page_params['template'].".tpl.php");
-		}
-		else
-		{
-			include(TEMPLATE_DIR."default.tpl.php");
-		}
+            if( file_exists(TEMPLATE_DIR.$page_params['template'].".tpl.php"))
+            {
+                include (TEMPLATE_DIR.$page_params['template'].".tpl.php");
+            }
+            else
+            {
+                include(TEMPLATE_DIR."default.tpl.php");
+            }
 	}
 	else
 	{
-		if(count($global_params['page_arguments']['gtp']) <= 0)
-		{
-			header("location: /index.html");
-		}
-		else
-		{
-			header("location: /404.html");
-			print "Page Not Found<br />"; exit;
-		}
+            if(count($global_params['page_arguments']['gtp']) <= 0)
+            {
+                header("location: /login.html");
+            }
+            else
+            {
+                header("location: /404.html");
+                print "Page Not Found<br />"; exit;
+            }
 	}
 	
 }
@@ -166,8 +163,8 @@ function make_session_active()
 {
 	global $global_params;
 	global $page_params;
-	
-	session_set_cookie_params((3600*24)); //store session only for one hour
+	$lifeTime = 60*60*24; //one day
+	session_set_cookie_params($lifeTime);
 	session_start();
 	
 	$global_params['session_arguments'] = array();

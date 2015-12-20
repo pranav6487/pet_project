@@ -80,8 +80,7 @@ $totalTables = 16;
 //    
 //);
 ?>
-Change _init() function, place proper checks for URLs<br />
-Login and session control<br />
+Login class file and session control<br />
 Super admin and restaurant login differentiation<br />
 Manage page, to just view restaurant data<br />
 Contact page, to send mail<br />
