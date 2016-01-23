@@ -50,7 +50,7 @@ function showTableOptions() {
     }
 
     if( tableOpts.length > 0 ) {
-        var tableOptsHtml = "<option value=''>Select</option>";
+        var tableOptsHtml = "<option value=''>Select Table</option>";
         for ( x in tableOpts ) {
             tableOptsHtml += "<option id='tableOpt_"+tableOpts[x]+"' value="+tableOpts[x]+">"+tableOpts[x]+"</option>"
         }
@@ -188,10 +188,12 @@ function refreshTableList() {
         }
         
         if( currTableList[tableNo]["partyName"] == "" ) {
-            tableListHtml += '<span style="color:grey;">'+tableNo+'</span> | ';
+            //tableListHtml += '<span style="color:grey;">'+tableNo+'</span> | ';
+            tableListHtml += '<button type="button" class="greyBtn">'+tableNo+'</button>&nbsp;';
         }
         else {
-            tableListHtml += '<span style="color:blue;cursor:pointer;" title="Clear Table" onclick="clearTable(\''+tableNo+'\');">'+currTableList[tableNo]["partyName"]+' ('+currTableList[tableNo]["noOfPeople"]+') ('+tableNo+')</span> | ';
+            //tableListHtml += '<span style="color:blue;cursor:pointer;" title="Clear Table" onclick="clearTable(\''+tableNo+'\');">'+currTableList[tableNo]["partyName"]+' ('+currTableList[tableNo]["noOfPeople"]+') ('+tableNo+')</span> | ';
+            tableListHtml += '<button class="greenBtn" type="button" onclick="clearTable(\''+tableNo+'\');" title="Clear Table"><i>'+tableNo+'</i><br />'+currTableList[tableNo]["partyName"]+' ('+currTableList[tableNo]["noOfPeople"]+')</i></button>&nbsp;';
         }
         
         if( i%4 == 0 || noOfTables == i ) {
@@ -236,7 +238,7 @@ function refreshWaitList() {
             var minutes = Math.floor(currWait.waitTime%60);
             waitListHtml += "<li>"+currWait.name+" ("+currWait.noOfPeople+") "+currWait.num+" "+hours+":"+minutes+" mins <span title='Remove party from wait list' style='color:blue;cursor:pointer' onclick=\"removeFromWaitList("+x+")\">Remove</span> ";
             if( currWait.tablesAvail.length > 0 ) {
-               waitListHtml += '<select class="allotFromWaitList"><option value= "">Select</option>'; 
+               waitListHtml += '<select class="allotFromWaitList"><option value= "">Select Table</option>'; 
                for( var y in currWait.tablesAvail ) {
                    waitListHtml += '<option value="'+x+'|'+currWait.tablesAvail[y]+'">'+currWait.tablesAvail[y]+'</option>';
                }

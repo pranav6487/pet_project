@@ -19,6 +19,75 @@ class Restaurant {
     
     public function getRestaurantDtls( $restId ) {
         $return = array();
+        $dbObj = new DbConnc(DB_URL);
+        $getRestDtls = "select rest_name,rest_loc,rest_add_1,rest_add_2,rest_contact_email,rest_manager_name,rest_manager_num,rest_contact1_name,rest_contact1_num,rest_contact2_name,rest_contact2_num,rest_type,rest_timings from tbl_restaurant_dtls where rest_id = ".$restId.";";
+        if( $dbObj->db_query($getRestDtls) ) {
+            while( $rows = $dbObj->db_fetch_array() ) {
+                $return['name'] = $rows['rest_name'];
+                $return['location'] = $rows['rest_loc'];
+                $return['address1'] = $rows['rest_add_1'];
+                $return['address2'] = $rows['rest_add_2'];
+                $return['restEmail'] = $rows['rest_contact_email'];
+                $return['restManagerName'] = $rows['rest_manager_name'];
+                $return['restManagerNum'] = $rows['rest_manager_num'];
+                $return['restContact1Name'] = $rows['rest_contact1_name'];
+                $return['restContact1Num'] = $rows['rest_contact1_num'];
+                $return['restContact2Name'] = $rows['rest_contact2_name'];
+                $return['restContact2Num'] = $rows['rest_contact2_num'];
+                $return['restType'] = $rows['rest_type'];
+                $return['restTimings'] = $rows['rest_timings'];
+            }
+        }
+        else {
+            die("Could not load restaurant details");
+        }
+        
+        $getTableDetails = "select table_id,table_min_occ,table_max_occ,table_no from tbl_table_dtls where rest_id = ".$restId.";";
+        if( $dbObj->db_query($getTableDetails) ) {
+            while( $rows = $dbObj->db_fetch_array() ) {
+                $return['tableDtls'][$rows['table_id']]['tableNo'] = $rows['table_no'];
+                $return['tableDtls'][$rows['table_id']]['tableMinOcc'] = $rows['table_min_occ'];
+                $return['tableDtls'][$rows['table_id']]['tableMaxOcc'] = $rows['table_max_occ'];
+            }
+        }
+        else {
+            die("Could not load table details");
+        }
+        
+        $getPartyRel = "select party_rel_id,no_of_people,eligible_tables,avg_time,buffer_time,next_avail_at from tbl_party_rest_relation where rest_id = ".$restId.";";
+        if( $dbObj->db_query($getPartyRel) ) {
+            while( $rows = $dbObj->db_fetch_array() ) {
+                $return['partyRel'][$rows['party_rel_id']]['noOfPeople'] = $rows['no_of_people'];
+                $return['partyRel'][$rows['party_rel_id']]['eligibleTables'] = $rows['eligible_tables'];
+                $eligibleTablesArr = explode(",",$rows['eligible_tables']);
+                $eligibleTableNos = "";
+                foreach( $eligibleTablesArr as $eligibleTableId ) {
+                    $eligibleTableNos .= $return['tableDtls'][$eligibleTableId]['tableNo'].",";
+                }
+                $return['partyRel'][$rows['party_rel_id']]['eligibleTableNos'] = trim($eligibleTableNos,",");
+                $return['partyRel'][$rows['party_rel_id']]['avgTime'] = $rows['avg_time'];
+                $return['partyRel'][$rows['party_rel_id']]['bufferTime'] = $rows['buffer_time'];
+                $return['partyRel'][$rows['party_rel_id']]['nextAvailAt'] = $rows['next_avail_at'];
+            }
+        }
+        else {
+            die("Could not load party and restaurant relation");
+        }
+        
+        return $return;
+    }
+    
+    public function getTableNoFromIds( $tableId ) {
+        if(is_array($tableId) ) {
+            
+        }
+        else {
+            
+        }
+    }
+    
+    public function getOngoingBkkDtls( $restId ) {
+        $return = array();
         $tableDtls = $this->getTableDtls($restId);
         $bookingDts = $this->getCurrentBookingDtls($restId);
         $currBookingDtls = $bookingDts['currBookingDtls'];
@@ -250,6 +319,22 @@ class Restaurant {
         
         echo json_encode($return);
         exit;
+    }
+    
+    public function getRestListForSuperUser( $userId ) {
+        $return = array();
+        $dbObj = new DbConnc(DB_URL);
+        $getRestSql = "select rest_id,rest_name from tbl_restaurant_dtls where status = 1;";
+        if( $dbObj->db_query($getRestSql) ) {
+            while( $rows = $dbObj->db_fetch_array() ) {
+                $return[] = array( "restId" => base64_encode($rows['rest_id']), "restName" => $rows['rest_name'] );
+            }
+        }
+        else {
+            //error handling
+        }
+        
+        return $return;
     }
 }
 ?>

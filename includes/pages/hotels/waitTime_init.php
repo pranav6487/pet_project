@@ -1,19 +1,34 @@
 <?php
 global $global_params;
 global $page_params;
-
 $page_params['page_title'] = "Wait Time";
+$pageArgs = $global_params['page_arguments'];
 
-$restId = 2;
+$users = new Users();
 $restObj = new Restaurant();
-$restDtls = $restObj->getRestaurantDtls( $restId );
-$currTableList = $restDtls['currTableList'];
-$waitList = $restDtls['waitList'];
-$avgTimeAtTable = $restDtls['avgTimeAtTable'];
-$tableCapacity = $restDtls['tableCapacity'];
-$nextAvailableAt = $restDtls['nextAvailableAt'];
-$bufferTime = $restDtls['bufferTime'];
-$totalTables = 16;
+
+if( $_SESSION[SESSION_USER_TYPE] == $users::SUPER_USER ) {
+    $userId = $_SESSION[SESSION_USER_ID];
+    $restList = $restObj->getRestListForSuperUser($userId);
+}
+
+if( $_SESSION[SESSION_USER_TYPE] == $users::SUPER_USER && !empty($pageArgs['restId']) ) {
+    $restId = base64_decode($pageArgs['restId']);
+}
+elseif( $_SESSION[SESSION_USER_TYPE] == $users::RESTAURANT_USER ) {
+    $restId = $_SESSION[SESSION_REST_ID];
+}
+
+if( !empty($restId) ) {
+    $restDtls = $restObj->getOngoingBkkDtls( $restId );
+    $currTableList = $restDtls['currTableList'];
+    $waitList = $restDtls['waitList'];
+    $avgTimeAtTable = $restDtls['avgTimeAtTable'];
+    $tableCapacity = $restDtls['tableCapacity'];
+    $nextAvailableAt = $restDtls['nextAvailableAt'];
+    $bufferTime = $restDtls['bufferTime'];
+    $totalTables = count($currTableList);
+}
 
 //$currTableList = array(
 //    "t2_1" => array( "partyName" => "", "seatTime" => "" , "endTime" => "", "noOfPeople" => ""),
@@ -80,10 +95,3 @@ $totalTables = 16;
 //    
 //);
 ?>
-Super admin and restaurant login differentiation<br />
-Manage page, to just view restaurant data<br />
-Contact page, to send mail<br />
-Javascript timer count-down for wait time<br />
-Javascript timer count-up for table occupied time<br />
-Case when noOfPeople is more than what is present for the restaurant<br />
-Option to put a customer on wait list and not allot a specific table - is it really needed?<br />

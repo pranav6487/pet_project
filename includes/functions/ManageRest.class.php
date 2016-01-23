@@ -2,7 +2,7 @@
 class ManageRest {
     public $dbObj;
     public $restObj;
-    const RESTAURANT_USER = 2;
+    
     public function __construct() {
         $this->dbObj = array(
             "cols" => array(
@@ -34,25 +34,33 @@ class ManageRest {
             }
         }
         $insertVals['created_on'] = time();
-        $insertSql .= "insert into tbl_restaurant_dtls (".  implode(",", array_keys($insertVals)).") values ( '".implode("','",$insertVals)."' )";
-        $dbObj = new DbConnc(DB_URL);
-        $return = array();
-        if( $dbObj->db_query($insertSql) ) {
-            $return['status'] = 1;
-            $restId = $dbObj->lastInsertId;
-            $return['restId'] = $restId;
-            $insertUser = "";
-            $insertUser = 'insert into tbl_users(user_email,user_passwd,user_type,rest_id,created_on) values ("'.$args['login_email'].'","'.md5($args['login_pwd']).'",'.self::RESTAURANT_USER.','.$restId.','.time().')';
-            if( !$dbObj->db_query($insertUser) ) {
+        $users = new Users();
+        if( $users->checkUserExist($args['login_email']) ) {
+            $insertSql .= "insert into tbl_restaurant_dtls (".  implode(",", array_keys($insertVals)).") values ( '".implode("','",$insertVals)."' )";
+            $dbObj = new DbConnc(DB_URL);
+            $return = array();
+            if( $dbObj->db_query($insertSql) ) {
+                $return['status'] = 1;
+                $restId = $dbObj->lastInsertId;
+                $return['restId'] = $restId;
+                $insertUser = "";
+                $userObj = new Users();
+                $insertUser = 'insert into tbl_users(user_email,user_passwd,user_type,rest_id,created_on) values ("'.$args['login_email'].'","'.md5($args['login_pwd']).'",'.$userObj::RESTAURANT_USER.','.$restId.','.time().')';
+                if( !$dbObj->db_query($insertUser) ) {
+                    $return['status'] = 0;
+                    $return['errMsg'] = "Could not execute query";
+                }
+            }
+            else {
                 $return['status'] = 0;
                 $return['errMsg'] = "Could not execute query";
             }
         }
         else {
             $return['status'] = 0;
-            $return['errMsg'] = "Could not execute query";
+            $return['errMsg'] = "User with email address {$args['login_email']} already exists. Choose another email";
         }
-        $dbObj->db_close();
+        //$dbObj->db_close();
         return $return;
     }
     

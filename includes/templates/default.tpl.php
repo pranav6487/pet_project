@@ -65,10 +65,10 @@ window.ALLOWED_DECIMAL_WITHOUT_HYPHEN=<?php echo ALLOWED_DECIMAL_WITHOUT_HYPHEN;
 		<div class="wrap">
 			<nav>
 				<ul>
-                                        <li><a href="/hotels/waitTime.html" title="Wait Time">Wait Time</a></li>
+                                        <li><a href="/hotels/waitTime.html" title="Wait Time">Reservation</a></li>
 					<li><a href="/hotels/manageRest.html" title="Manage">Manage</a></li>
-					<li><a href="/shop/cart.html" title="Cart">Cart</a></li>
-					<li><a href="javascript:void(0);" title="Contact">Contact</a></li>
+					<li><a href="/hotels/contact.html" title="Contact">Contact</a></li>
+                                        <li><a href="javascript:void(0);" title="Logout" id="logoutHref">Logout</a></li>
 				</ul>
 			</nav>
 		</div>

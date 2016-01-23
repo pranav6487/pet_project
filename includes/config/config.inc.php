@@ -2,6 +2,12 @@
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 ini_set("display_errors",true);
 
+//Domain name link
+//LOCAL
+define("HTTP_URL","http://www.waitTime.com/");
+//PRODUCTION
+//define("HTTP_URL","http://www.managemyresto.com/");
+
 //Directory constants
 define("COMMON_DIR",realpath(dirname(__FILE__).'/../../../'));
 define("BASE_PATH", realpath(dirname(__FILE__).'/../../'));
@@ -19,7 +25,8 @@ define("LIB_DIR", INCLUDE_DIR . 'lib/');
 define("HTTP_HOST_NAME",$_SERVER['HTTP_HOST']); // server host name
 
 //Database connection URL
-define("DB_URL","mysqli://root:test@123@localhost:/restaurant_db");
+//LOCAL
+define("DB_URL","mysqli://db_user:pranav6487@localhost:/restaurant_db");
 //Cart Cookie Const
 define("CART_SESSION","cart_session_val");
 define("CART_COOKIE","vst");
@@ -52,6 +59,13 @@ define("ALLOWED_USER_NAMES","/^[a-zA-Z]+[a-zA-Z0-9\-\_\.]*$/");
 define("ALLOWED_FEED_DETAILS",'/^[a-zA-Z0-9\(\)\s\-\.\:\{\}\\\&\=\-\/]+$/');
 define("ALLOWED_ALPHANUM","/^[a-zA-Z0-9]+[a-zA-Z 0-9 \- \_ \, ]*$/");
 define("ALLOWED_DECIMAL_WITHOUT_HYPHEN","/^(\d)?(\d|,)*\.?\d*$/");
+
+//Session variables for User id, user type
+define("SESSION_USER_ID","userId");
+define("SESSION_USER_TYPE","userType");
+define("SESSION_REST_ID","restId");
+
+define("CONTACT_US_EMAIL","pranav6487@gmail.com");
 
 require_once CONFIG_DIR."pages.inc.php";
 require_once FUNCTIONS_DIR . "common.functions.inc.php";

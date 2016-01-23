@@ -94,7 +94,7 @@ function _init()
 	make_session_active();
 	//isset($global_params['session_arguments']['userId']) && !empty($global_params['session_arguments']['userId'])
         if( isset($global_params['session_arguments']['userId']) && !empty($global_params['session_arguments']['userId']) ) {
-            if( $global_params['page_arguments']['gtp'][0] == "login" ) {
+            if( $global_params['page_arguments']['gtp'][0] == "login" && $global_params['page_arguments']['action'] != "logout" ) {
                 $page_params['page_dir_file_name'] = "hotels/waitTime";
                 header("Location: ".HTTP_BASE_PATH.$page_params['page_dir_file_name'].".html");
                 exit;
@@ -163,7 +163,7 @@ function make_session_active()
 {
 	global $global_params;
 	global $page_params;
-	$lifeTime = 60*60*24; //one day
+	$lifeTime = time() + 60*60*24; //one day
 	session_set_cookie_params($lifeTime);
 	session_start();
 	
