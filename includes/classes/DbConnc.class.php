@@ -66,7 +66,8 @@ class DbConnc
                     mysqli_options($this->link,$key,$val);
             }
 
-            $this->link = @mysqli_connect($this->host, $this->username, $this->password,'',$this->port) or die("Sorry. Could not connect to Database Server");
+            //$this->link = @mysqli_connect($this->host, $this->username, $this->password,'',$this->port) or die("Sorry. Could not connect to Database Server");
+            $this->link = @mysqli_connect($this->host, $this->username, $this->password,'',$this->port);
 
             if(!$this->link)
             {
