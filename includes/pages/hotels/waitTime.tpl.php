@@ -51,10 +51,10 @@ var ALLOT_TABLE_FROM_WAIT_LIST = <?php echo $restObj::ALLOT_TABLE_FROM_WAIT_LIST
                 <input size="30" id="partyName" name="partyName" class="inpTxtBox partyDtls" placeholder="Add one name from the party" value="" type="text"/>
             </li>
             <li>
-                <input size="30" type="text" id="partyCount" name="partyCount" class="inpTxtBox partyDtls numeric" placeholder="No of people in the party" value="" maxlength="10"/>
+                <input size="30" type="number" id="partyCount" name="partyCount" class="inpTxtBox partyDtls numeric" placeholder="No of people in the party" value="" maxlength="10"/>
             </li>
             <li>
-                <input  size="30" type="text" id="partyNum" name="partyNum" class="inpTxtBox partyDtls numeric" placeholder="Mobile Number" value="" maxlength="10"/>
+                <input  size="30" type="number" id="partyNum" name="partyNum" class="inpTxtBox partyDtls numeric" placeholder="Mobile Number" value="" maxlength="10"/>
             </li>
             <li id="selectTable" style="display:none;">
                 <select class="inpTxtBox" id="tablesOptions">

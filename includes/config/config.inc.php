@@ -2,11 +2,27 @@
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 ini_set("display_errors",true);
 
+$whitelist = array(
+    '127.0.0.1',
+    '::1'
+);
+
+if( in_array($_SERVER['REMOTE_ADDR'], $whitelist) ){
+    define("DEV_ENV",true);
+}
+else {
+    define("PROD_ENV",false);
+}
+
 //Domain name link
-//LOCAL
-define("HTTP_URL","http://www.waitTime.com/");
-//PRODUCTION
-//define("HTTP_URL","http://www.managemyresto.com/");
+if( DEV_ENV ) {
+    //LOCAL
+    define("HTTP_URL","http://www.waitTime.com/");
+}
+elseif( PROD_ENV ) {
+    //PRODUCTION
+    define("HTTP_URL","http://www.managemyresto.com/");
+}
 
 //Directory constants
 define("COMMON_DIR",realpath(dirname(__FILE__).'/../../../'));
@@ -25,8 +41,15 @@ define("LIB_DIR", INCLUDE_DIR . 'lib/');
 define("HTTP_HOST_NAME",$_SERVER['HTTP_HOST']); // server host name
 
 //Database connection URL
-//LOCAL
-define("DB_URL","mysqli://db_user:pranav6487@localhost:/restaurant_db");
+if( DEV_ENV ) {
+    //LOCAL
+    define("DB_URL","mysqli://db_user:pranav6487@localhost:/restaurant_db");
+}
+elseif( PROD_ENV ) {
+    //PRODUCTION
+    define("DB_URL","mysqli://db_user:pranav6487@my-db-instance.cl4afprusibk.us-west-2.rds.amazonaws.com:/restaurant_db");
+}
+
 //Cart Cookie Const
 define("CART_SESSION","cart_session_val");
 define("CART_COOKIE","vst");
