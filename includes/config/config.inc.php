@@ -7,11 +7,14 @@ $whitelist = array(
     '::1'
 );
 
+define("DEV_ENV",true);
+define("PROD_ENV",false);
+
 if( in_array($_SERVER['REMOTE_ADDR'], $whitelist) ){
     define("DEV_ENV",true);
 }
 else {
-    define("PROD_ENV",false);
+    define("PROD_ENV",true);
 }
 
 //Domain name link
