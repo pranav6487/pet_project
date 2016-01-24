@@ -3,7 +3,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/managemyresto
+    destination: /var/www/html
 hooks:
   ApplicationStop:
     - location: deregister_from_elb.sh
