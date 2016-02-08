@@ -335,8 +335,24 @@ header {
 			border-bottom: 7px solid #ededed;
 			margin-bottom: 30px;
 			position: relative; }
+
+.sale ul li{ padding: 10px;}
+ul.hotel{ padding-top: 10px;}
+ul.hotel li{ padding: 5px 10px;}
+ul.hotel li label{display:inline-block;font-size:13px;font-weight:bold;color:#333;width:40%;}
+ul.hotel li strong{padding: 0 3px;}
+#tableList { text-align: center;}
+#tableList button{ width: 23%; height: 55px;}
+.sale textarea,.sale .inpTxtBox{ width: 94%; margin: 0;}
+.sale input[type="button"]{ font-size: 13px; min-width: 60px;}
+.blue {color:#fff;background-color:#337ab7 !important;border-color:#2e6da4;}
+.red {color:#fff;background-color:#d9534f !important;border-color:#d43f3a;}
+.sale table{ width: 100%;text-align: center;}
+.sale table th{ font-weight: bold; }
+.allotFromWaitList{ margin-top: 10px;}
+.allotFromWaitList option{ line-height: 20px;}
 						
-			#slideshow > ul, #featured > ul, .sale > ul { border-bottom: 1px solid #f4f4f4; }
+			#slideshow > ul, #featured > ul { border-bottom: 1px solid #f4f4f4; }
 		
 			#slideshow li, #featured li, .sale li { 
 				list-style: none;
@@ -492,7 +508,7 @@ header {
 						
 							#featured .price li.details, .sale .price li.details { width: 40px; }
 							
-			.sale h1 { color: #b71012; }
+			.sale h1 { /*color: #b71012;*/ color: #666; }
 							
 				.sale h1 a { 
 					font-size: 12px;
@@ -666,7 +682,7 @@ footer {
 	
 	footer p, footer nav { width: auto; }
 	
-	footer p { padding: 0 15px; }
+	footer p {/* padding: 0 15px;*/ line-height: 20px; }
 		
 	footer a { color: #858585; }
 	
@@ -674,7 +690,7 @@ footer {
 		
 	footer b { color: #363636; }
 		
-	footer nav { padding: 5px 3px 0 15px; }
+	footer nav { padding: 5px 3px 0 0px; font-size: 12px; }
 		
 		footer li {
 			list-style: none;

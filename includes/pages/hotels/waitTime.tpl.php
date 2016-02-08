@@ -61,8 +61,8 @@ var ALLOT_TABLE_FROM_WAIT_LIST = <?php echo $restObj::ALLOT_TABLE_FROM_WAIT_LIST
                 </select>
             </li>
             <li class="center">
-                <input type="button" id="addParty" name="addParty" onclick="getSeatingLeft();" value="Add" />
-                <input type="button" id="clearForm" name="clearForm" onclick="clearForm();" value="Reset"/>
+                <input type="button" id="addParty" name="addParty" onclick="getSeatingLeft();" value="Add" class="blue" />
+                <input type="button" id="clearForm" name="clearForm" onclick="clearForm();" value="Reset" class="red"/>
             </li>
         </ul>
     </section>

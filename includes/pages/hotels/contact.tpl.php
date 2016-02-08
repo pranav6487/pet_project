@@ -15,9 +15,9 @@ global $page_params;
                 <br /><textarea id="queryMsg" name="queryMsg" rows="10" cols="38" placeholder="Message"></textarea>
             </li>
             <li id="sbmtLi" class="center">
-                <input type="button" id="sbmtQuery" name="sbmtQuery" value="Submit"/>
+                <input type="button" id="sbmtQuery" name="sbmtQuery" value="Submit" class="blue"/>
                 &nbsp;
-                <input type="button" id="reset" name="reset" value="Reset"/>
+                <input type="button" id="reset" name="reset" value="Reset" class="red"/>
             </li>
             <li id="plsWaitLi" style="display:none;">
                 Please wait ...

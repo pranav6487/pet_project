@@ -130,55 +130,68 @@ else {
 <section id="left-column">
     <section class="sale">
         <h1>Restaurant Details</h1>
-        <ul>
+        <ul class="hotel">
             <li>
-                Name: <?php echo $restDtls['name']; ?>
+                <label>Name</label>
+                <strong>:</strong> <?php echo $restDtls['name']; ?>
             </li>
             <li>
-                Type: <?php echo $restDtls['restType']; ?>
+                <label>Type</label>
+                <strong>:</strong> <?php echo $restDtls['restType']; ?>
             </li>
             <li>
-                Timing: <?php echo $restDtls['restTimings']; ?>
+                <label>Timing</label>
+                <strong>:</strong> <?php echo $restDtls['restTimings']; ?>
             </li>
             <li>
-                Location: <?php echo $restDtls['location']; ?>
+                <label>Location</label>
+                <strong>:</strong> <?php echo $restDtls['location']; ?>
             </li>
             <li>
-                Address Line 1: <?php echo $restDtls['address1']; ?>
+                <label>Address Line 1</label>
+                <strong>:</strong> <?php echo $restDtls['address1']; ?>
             </li>
             <li>
-                Address Line 2: <?php echo $restDtls['address2']; ?>
+                <label>Address Line 2</label>
+                <strong>:</strong> <?php echo $restDtls['address2']; ?>
             </li>
             <li>
-                Email: <?php echo $restDtls['restEmail']; ?>
+                <label>Email</label>
+                <strong>:</strong> <?php echo $restDtls['restEmail']; ?>
             </li>
             <li>
-                Manager Name: <?php echo $restDtls['restManagerName']; ?>
+                <label>Manager Name</label>
+                <strong>:</strong> <?php echo $restDtls['restManagerName']; ?>
             </li>
             <li>
-                Manager Number: <?php echo $restDtls['restManagerNum']; ?>
+                <label>Manager Number</label>
+                <strong>:</strong> <?php echo $restDtls['restManagerNum']; ?>
             </li>
             <li>
-                POC1 Name: <?php echo $restDtls['restContact1Name']; ?>
+                <label>POC1 Name</label>
+                <strong>:</strong> <?php echo $restDtls['restContact1Name']; ?>
             </li>
             <li>
-                POC1 Number: <?php echo $restDtls['restContact1Num']; ?>
+                <label>POC1 Number</label>
+                <strong>:</strong> <?php echo $restDtls['restContact1Num']; ?>
             </li>
             <li>
-                POC2 Name: <?php echo $restDtls['restContact2Name']; ?>
+                <label>POC2 Name</label>
+                <strong>:</strong> <?php echo $restDtls['restContact2Name']; ?>
             </li>
             <li>
-                POC2 Number: <?php echo $restDtls['restContact2Num']; ?>
+                <label>POC2 Number</label>
+                <strong>:</strong> <?php echo $restDtls['restContact2Num']; ?>
             </li>
         </ul>
     </section>
     <section class="sale">
         <h1>Table Details</h1>
-        <table>
+        <table cellspacing="10">
             <tr>
-                <td style="width:20%">Table no</td>
-                <td style="width:40%">Min Occupancy</td>
-                <td style="width:40%">Max Occupancy</td>
+                <th style="width:22%">Table no</th>
+                <th style="width:39%">Min Occupancy</th>
+                <th style="width:39%">Max Occupancy</th>
             </tr>
                 <?php
                 foreach( $restDtls['tableDtls'] as $tableId => $tableDtls ) {
@@ -189,25 +202,25 @@ else {
     </section>
     <section class="sale">
         <h1>Party Relation Details</h1>
-        <table>
+        <table cellspacing="10">
             <tr>
-                <td style="width:10%">No of People</td>
-                <td style="width:30%">Eligible Tables</td>
-                <td style="width:20%">Average Time</td>
-                <td style="width:20%">Buffer Time</td>
-                <td style="width:20%">Next Available At</td>
+                <th style="width:10%">No of People</th>
+                <th style="width:30%">Eligible Tables</th>
+                <th style="width:20%">Average Time</th>
+                <th style="width:20%">Buffer Time</th>
+                <th style="width:20%">Next Available At</th>
             </tr>
             <?php 
             $partyRelHtml = "";
             foreach( $restDtls['partyRel'] as $partyRelId => $partyRelDtls ) {
                 $partyRelHtml .="<tr>";
                 $partyRelHtml .= "<td style='width:10%'>".$partyRelDtls['noOfPeople']."</td>";
-                $partyRelHtml .= "<td style='width:30%'>".$partyRelDtls['eligibleTableNos']."</td>";
+                $partyRelHtml .= "<td style='width:30%'>".preg_replace("/,/",", ",$partyRelDtls['eligibleTableNos'])."</td>";
                 $partyRelHtml .= "<td style='width:20%'>".$partyRelDtls['avgTime']."</td>";
                 $partyRelHtml .= "<td style='width:20%'>".$partyRelDtls['bufferTime']."</td>";
                 
                 if( $partyRelDtls['nextAvailAt'] == 0 ) {
-                    $partyRelHtml .= "<td>Now</td>";
+                    $partyRelHtml .= "<td style='width:20%'>Now</td>";
                 }
                 else {
                 $partyRelHtml .= "<td style='width:20%'>".date("d/m/y",$partyRelDtls['nextAvailAt'])."</td>";   
