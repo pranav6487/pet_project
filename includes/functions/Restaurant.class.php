@@ -307,9 +307,8 @@ class Restaurant {
                 break;
             
             case self::ALLOT_TABLE_FROM_WAIT_LIST:
-                $allotTableFromWaitListSql = "update tbl_booking_dtls set status = ".self::SEATED_STATUS.", seated_time = ".$pageArgs['seatedTime'].", estd_empty_time = ".$pageArgs['estdEndTime'].", table_id = ".$tableId.", booked_till = ".$pageArgs['bookedTill']." where rest_id = ".$restId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId;
+                $allotTableFromWaitListSql = "update tbl_booking_dtls set status = ".self::SEATED_STATUS.", seated_time = ".$pageArgs['seatedTime'].", estd_empty_time = ".$pageArgs['estdEndTime'].", table_id = ".$tableId.", booked_till = ".$pageArgs['bookedTill']." where rest_id = ".$restId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId.";";
                 $dbObj->db_query($allotTableFromWaitListSql);
-                echo $allotTableFromWaitListSql;
                 if( !empty($pageArgs['nextAvailableAt']) ) {
                     $updateNextAvailSql = "update tbl_party_rest_relation set next_avail_at = ".$pageArgs['nextAvailableAt']." where rest_id = {$restId} and party_rel_id = {$partyRelId};";
                     $dbObj->db_query($updateNextAvailSql);
