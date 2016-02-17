@@ -98,7 +98,7 @@ class Restaurant {
                 $currTable[$tableNo] = $currBookingDtls[$tableId];
             }
             else {
-                $currTable[$tableNo] = array("partyName" => "","partyNum" => "","seatTime" => "","endTime" => "","noOfPeople" => "","bookingId" => "");
+                $currTable[$tableNo] = array("partyName" => "","partyNum" => "","seatTime" => "","endTime" => "","noOfPeople" => "","bookingId" => "", "bookedTill" => "");
             }
         }
         $partyDtls = $this->getRestPartyDtls($restId);
@@ -135,14 +135,14 @@ class Restaurant {
     public function getCurrentBookingDtls($restId) {
         $dbObj = new DbConnc(DB_URL);
         $dayStartTime = strtotime(date('Y-m-d') . '10:00:00');
-        $currBookingSql = "select a.booking_id,a.table_id,a.party_rel_id,a.no_of_people,a.wait_list_time,a.seated_time,a.estd_empty_time,a.table_empty_time,a.status,b.customer_name,b.customer_number from tbl_booking_dtls as a inner join tbl_customer_dtls as b on b.customer_id = a.customer_id where (a.status = ".self::WAITING_STATUS." or a.status = ".self::SEATED_STATUS.") and a.start_time < ".time()." and a.start_time > ".$dayStartTime.";";
+        $currBookingSql = "select a.booking_id,a.table_id,a.party_rel_id,a.no_of_people,a.wait_list_time,a.seated_time,a.estd_empty_time,a.table_empty_time,a.status,a.booked_till,b.customer_name,b.customer_number from tbl_booking_dtls as a inner join tbl_customer_dtls as b on b.customer_id = a.customer_id where (a.status = ".self::WAITING_STATUS." or a.status = ".self::SEATED_STATUS.") and a.start_time < ".time()." and a.start_time > ".$dayStartTime.";";
         $currBookingDtls = array();
         $waitListDtls = array();
         if( $dbObj->db_query($currBookingSql) ) {
             if( $dbObj->num_rows > 0 ) {
                 while( $rows = $dbObj->db_fetch_array() ) {
                     if( $rows['status'] == self::SEATED_STATUS ) {
-                        $currBookingDtls[$rows['table_id']] = array( "partyName" => $rows['customer_name'],"partyNum" => $rows['customer_number'],"seatTime" => $rows['seated_time'],"endTime" => $rows['estd_empty_time'],"noOfPeople" => $rows['no_of_people'],"bookingId" => $rows['booking_id'] );
+                        $currBookingDtls[$rows['table_id']] = array( "partyName" => $rows['customer_name'],"partyNum" => $rows['customer_number'],"seatTime" => $rows['seated_time'],"endTime" => $rows['estd_empty_time'],"noOfPeople" => $rows['no_of_people'],"bookingId" => $rows['booking_id'], "bookedTill" => $rows['booked_till'] );
                     }
                     elseif( $rows['status'] == self::WAITING_STATUS ) {
                         $waitListDtls[] = array("name" => $rows['customer_name'],"noOfPeople" => $rows['no_of_people'],"num" => $rows['customer_number'],"waitTime" => $rows['wait_list_time'],"tablesAvail" => "");
@@ -255,7 +255,8 @@ class Restaurant {
             case self::ALLOT_TABLE:
                 $seatedTime = $pageArgs['seatedTime'];
                 $estdEndTime = $pageArgs['estdEndTime'];
-                $allotTableSql = "insert into tbl_booking_dtls (rest_id,table_id,party_rel_id,customer_id,no_of_people,status,seated_time,estd_empty_time,start_time) values({$restId},{$tableId},{$partyRelId},{$custId},{$noOfPeople},".self::SEATED_STATUS.",{$seatedTime},{$estdEndTime},".time().");";
+                $bookedTill = $pageArgs['bookedTill'];
+                $allotTableSql = "insert into tbl_booking_dtls (rest_id,table_id,party_rel_id,customer_id,no_of_people,status,seated_time,estd_empty_time,start_time,booked_till) values({$restId},{$tableId},{$partyRelId},{$custId},{$noOfPeople},".self::SEATED_STATUS.",{$seatedTime},{$estdEndTime},".time().",{$bookedTill});";
                 if( $dbObj->db_query($allotTableSql) ) {
                     $return['bookingId'] = $dbObj->lastInsertId;
                 }
@@ -286,7 +287,7 @@ class Restaurant {
                 break;
             
             case self::EMPTY_TABLE:
-               $emptyTableSql = "update tbl_booking_dtls set status = ".self::DONE_STATUS.", table_empty_time = ".time().", end_time = ".time()." where rest_id = ".$restId." and table_id = ".$tableId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId.";";
+               $emptyTableSql = "update tbl_booking_dtls set status = ".self::DONE_STATUS.", table_empty_time = ".time().", end_time = ".time().", booked_till = 0 where rest_id = ".$restId." and table_id = ".$tableId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId.";";
                 $dbObj->db_query($emptyTableSql);
                 
                 if( !empty($pageArgs['nextAvailableAt']) ) {
@@ -306,7 +307,7 @@ class Restaurant {
                 break;
             
             case self::ALLOT_TABLE_FROM_WAIT_LIST:
-                $allotTableFromWaitListSql = "update tbl_booking_dtls set status = ".self::SEATED_STATUS.", seated_time = ".$pageArgs['seatedTime'].", estd_empty_time = ".$pageArgs['estdEndTime'].", table_id = ".$tableId." where rest_id = ".$restId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId;
+                $allotTableFromWaitListSql = "update tbl_booking_dtls set status = ".self::SEATED_STATUS.", seated_time = ".$pageArgs['seatedTime'].", estd_empty_time = ".$pageArgs['estdEndTime'].", table_id = ".$tableId.", booked_till = ".$pageArgs['bookedTill']." where rest_id = ".$restId." and party_rel_id = ".$partyRelId." and customer_id = ".$custId;
                 $dbObj->db_query($allotTableFromWaitListSql);
                 echo $allotTableFromWaitListSql;
                 if( !empty($pageArgs['nextAvailableAt']) ) {
