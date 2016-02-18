@@ -223,7 +223,7 @@ else {
                     $partyRelHtml .= "<td style='width:20%'>Now</td>";
                 }
                 else {
-                $partyRelHtml .= "<td style='width:20%'>".date("d/m/y",$partyRelDtls['nextAvailAt'])."</td>";   
+                $partyRelHtml .= "<td style='width:20%'>".date("d-m-y h:i A",$partyRelDtls['nextAvailAt'])."</td>";   
                 }
                 $partyRelHtml .="</tr>";
             }

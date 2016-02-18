@@ -132,17 +132,21 @@ function getSeatingLeft() {
         var possibleTables = tableCapacity[noOfPeople];
         var x;
         var bookedTill = [];
+        var tableNoBookedTill = [];
         for( x in possibleTables ) {
             bookedTill.push(currTableList[possibleTables[x]]["bookedTill"]);
+            tableNoBookedTill[currTableList[possibleTables[x]]["bookedTill"]] = possibleTables[x];
         }
         
         bookedTill.sort(date_sort_asc);
         if( currDate > bookedTill[0] ) {
             var waitTime = bufferTime[noOfPeople];
+            currTableList[ tableNoBookedTill[bookedTill[0]] ]["bookedTill"] = addMinutes( currTableList[ tableNoBookedTill[bookedTill[0]] ]["bookedTill"], bufferTime[noOfPeople] );
         }
         else {
             var diff = Math.abs( new Date(bookedTill[0]) - new Date(currDate) );
             var waitTime = Math.round((diff/1000)/60);
+            currTableList[ tableNoBookedTill[bookedTill[0]] ]["bookedTill"] = addMinutes( currTableList[ tableNoBookedTill[bookedTill[0]] ]["bookedTill"], avgTimeAtTable[noOfPeople] );
             nextAvailableAt[noOfPeople] = bookedTill[1];
         }
         
@@ -282,12 +286,13 @@ function removeFromWaitList( index ) {
         //nextAvailableAt[noOfPeople] = 0;
         var params = "restId="+$("#restId").val()+"&noOfPeople="+waitList[index]["noOfPeople"]+"&partyName="+waitList[index]["name"]+"&partyNum="+waitList[index]["num"];
         waitList.splice(index,1);
-        if( waitList.length == 0 ) {
-            $("#waitList").html("");
-        }
-        else {
-            reCalculateWaitList();
-        }
+        reCalculateWaitList();
+//        if( waitList.length == 0 ) {
+//            $("#waitList").html("");
+//        }
+//        else {
+//            reCalculateWaitList();
+//        }
         
         if( typeof nextAvailableAt[noOfPeople] !== "undefined" ) {
             params += "&nextAvailableAt="+jsToPhpTime(nextAvailableAt[noOfPeople]);
@@ -305,61 +310,74 @@ function resetNextAvailableAt() {
 function reCalculateWaitList() {
     var currDate = new Date();
     resetNextAvailableAt();
-    for ( var x in waitList ) {
-        var currWait = waitList[x];
-        var noOfPeople = currWait.noOfPeople;
-        var possibleTables = tableCapacity[noOfPeople];
-        var tableOpts = [];
-        var bookedTill = [];
-        for ( var y in possibleTables ) {
-            var tableNo = possibleTables[y];
-            if( currTableList[tableNo]["partyName"] == "" ) {
-                tableOpts.push(tableNo);
-            }
-            else {
-                bookedTill.push(currTableList[tableNo]["bookedTill"]);
-            }
+    
+    for( var x in currTableList ) {
+        if( currTableList[x]["partyName"] != "" ) {
+            currTableList[x]['bookedTill'] = currTableList[x]['endTime'];
         }
-        
-        if( tableOpts.length > 0 ) {
-            currWait.tablesAvail = tableOpts;
-            currWait.waitTime = 0;
-            nextAvailableAt[noOfPeople] = 0;
-        }
-        else {
-            bookedTill.sort(date_sort_asc);
-            if( currDate > bookedTill[0] ) {
-                var waitTime = bufferTime[noOfPeople];
+    }
+    
+    if( waitList.length > 0 ) {
+        for ( var x in waitList ) {
+            var currWait = waitList[x];
+            var noOfPeople = currWait.noOfPeople;
+            var possibleTables = tableCapacity[noOfPeople];
+            var tableOpts = [];
+            var bookedTill = [];
+            var tableNoBookedTill = [];
+            for ( var y in possibleTables ) {
+                var tableNo = possibleTables[y];
+                if( currTableList[tableNo]["partyName"] == "" ) {
+                    tableOpts.push(tableNo);
+                }
+                else {
+                    bookedTill.push(currTableList[tableNo]["bookedTill"]);
+                    tableNoBookedTill[currTableList[tableNo]["bookedTill"]] = tableNo;
+                }
+            }
+
+            if( tableOpts.length > 0 ) {
+                currWait.tablesAvail = tableOpts;
+                currWait.waitTime = 0;
                 nextAvailableAt[noOfPeople] = 0;
             }
             else {
-                var diff = Math.abs( new Date(bookedTill[0]) - new Date(currDate) );
-                var waitTime = Math.round((diff/1000)/60);
-                nextAvailableAt[noOfPeople] = bookedTill[1];
+                bookedTill.sort(date_sort_asc);
+                if( currDate > bookedTill[0] ) {
+                    var waitTime = bufferTime[noOfPeople];
+                    currTableList[ tableNoBookedTill[bookedTill[0]] ]["bookedTill"] = addMinutes( currTableList[ tableNoBookedTill[bookedTill[0]] ]["bookedTill"], bufferTime[noOfPeople] );
+                    nextAvailableAt[noOfPeople] = 0;
+                }
+                else {
+                    var diff = Math.abs( new Date(bookedTill[0]) - new Date(currDate) );
+                    var waitTime = Math.round((diff/1000)/60);
+                    currTableList[ tableNoBookedTill[bookedTill[0]] ]["bookedTill"] = addMinutes( currTableList[ tableNoBookedTill[bookedTill[0]] ]["bookedTill"], avgTimeAtTable[noOfPeople] );
+                    nextAvailableAt[noOfPeople] = bookedTill[1];
+                }
+
+                /**Old code starts here**/
+    //            if( nextAvailableAt[noOfPeople] == 0 || typeof nextAvailableAt[noOfPeople] === "undefined" ) {
+    //                endTime.sort(date_sort_asc);
+    //                if( currDate > endTime[0] ) {
+    //                    var waitTime = bufferTime[noOfPeople];
+    //                    nextAvailableAt[noOfPeople] = 0;
+    //                }
+    //                else {
+    //                    var diff = Math.abs( new Date(endTime[0]) - new Date(currDate) );
+    //                    var waitTime = Math.round((diff/1000)/60);
+    //                    nextAvailableAt[noOfPeople] = addMinutes(endTime[0], avgTimeAtTable[noOfPeople]);
+    //                }
+    //            }
+    //            else {
+    //                var diff = Math.abs( new Date(nextAvailableAt[noOfPeople]) - new Date(currDate) );
+    //                var waitTime = Math.round((diff/1000)/60);
+    //                nextAvailableAt[noOfPeople] = addMinutes(nextAvailableAt[noOfPeople], avgTimeAtTable[noOfPeople]);
+    //            }
+                /**Old code ends here**/
+
+                currWait.tablesAvail = "";
+                currWait.waitTime = waitTime;
             }
-            
-            /**Old code starts here**/
-//            if( nextAvailableAt[noOfPeople] == 0 || typeof nextAvailableAt[noOfPeople] === "undefined" ) {
-//                endTime.sort(date_sort_asc);
-//                if( currDate > endTime[0] ) {
-//                    var waitTime = bufferTime[noOfPeople];
-//                    nextAvailableAt[noOfPeople] = 0;
-//                }
-//                else {
-//                    var diff = Math.abs( new Date(endTime[0]) - new Date(currDate) );
-//                    var waitTime = Math.round((diff/1000)/60);
-//                    nextAvailableAt[noOfPeople] = addMinutes(endTime[0], avgTimeAtTable[noOfPeople]);
-//                }
-//            }
-//            else {
-//                var diff = Math.abs( new Date(nextAvailableAt[noOfPeople]) - new Date(currDate) );
-//                var waitTime = Math.round((diff/1000)/60);
-//                nextAvailableAt[noOfPeople] = addMinutes(nextAvailableAt[noOfPeople], avgTimeAtTable[noOfPeople]);
-//            }
-            /**Old code ends here**/
-            
-            currWait.tablesAvail = "";
-            currWait.waitTime = waitTime;
         }
     }
     refreshWaitList();
