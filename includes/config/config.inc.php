@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 ini_set("display_errors",true);
-
+date_default_timezone_set("Asia/Kolkata");
 $whitelist = array(
     '127.0.0.1',
     '::1'
