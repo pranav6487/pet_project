@@ -184,7 +184,7 @@ class Restaurant {
     
     public function getCustomerId( $custName, $custNumber ) {
         $dbObj = new DbConnc(DB_URL);
-        $selectSql = "select customer_id,customer_name from tbl_customer_dtls where customer_number = ".$custNumber.";";
+        $selectSql = "select customer_id,customer_name from tbl_customer_dtls where customer_number = '".$custNumber."';";
         if( $dbObj->db_query($selectSql) ) {
             if( $dbObj->num_rows > 0 ) {
                 $custDtls = array();
@@ -194,14 +194,14 @@ class Restaurant {
                 
                 $custId = array_search($custName,$custDtls);
                 if( !$custId ) {
-                    $insertDuplicateCust = "insert into tbl_customer_dtls (customer_name,customer_number,is_duplicate,created_on) values('{$custName}',{$custNumber},1,".time().");";
+                    $insertDuplicateCust = "insert into tbl_customer_dtls (customer_name,customer_number,is_duplicate,created_on) values('{$custName}','{$custNumber}',1,".time().");";
                     if( $dbObj->db_query($insertDuplicateCust) ) {
                         $custId = $dbObj->lastInsertId;
                     }
                 }
             }
             else {
-                $insertSql = "insert into tbl_customer_dtls (customer_name,customer_number,created_on) values('{$custName}',{$custNumber},".time().");";
+                $insertSql = "insert into tbl_customer_dtls (customer_name,customer_number,created_on) values('{$custName}','{$custNumber}',".time().");";
                 if( $dbObj->db_query($insertSql) ) {
                     $custId = $dbObj->lastInsertId;
                 }
