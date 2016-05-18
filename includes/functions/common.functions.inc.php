@@ -111,8 +111,8 @@ function _init()
             //ppr($page_params); ppr($global_params); exit;
         }
         else {
-            header("location: ".HTTP_BASE_PATH."login.html");
-            exit;
+            //header("location: ".HTTP_BASE_PATH."login.html");
+            //exit;
         }
 }
 
@@ -149,6 +149,7 @@ function display_template()
             if(count($global_params['page_arguments']['gtp']) <= 0)
             {
                 header("location: /login.html");
+                exit;
             }
             else
             {
