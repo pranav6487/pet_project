@@ -19,5 +19,6 @@ if( $pageArgs['aj'] == 1 && $pageArgs['action'] == "contactMe" ) {
     else {
         http_response_code(400);
     }
+    exit;
 }
 ?>
