@@ -77,7 +77,7 @@ global $page_params;
                     </li>
                     <?php 
                     }
-                    else {var_dump($global_params['session_arguments']['userId']);
+                    else {
                     ?>
                     <li>
                         <a class="page-scroll" href="/login.html" target="_blank">Login</a>
