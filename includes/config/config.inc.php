@@ -41,6 +41,7 @@ define("CSS_URL", "/css/");
 define("JS_URL", "/js/");
 define("LIB_DIR", INCLUDE_DIR . 'lib/');
 define("HTTP_HOST_NAME",$_SERVER['HTTP_HOST']); // server host name
+define("FONT_AWESOME_URL","/font-awesome/");
 
 //Database connection URL
 if( DEV_ENV ) {

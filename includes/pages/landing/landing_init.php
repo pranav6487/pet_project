@@ -1,5 +1,4 @@
 <?php
-echo "landing init<br />";
 global $global_params;
 global $page_params;
 

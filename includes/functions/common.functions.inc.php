@@ -93,7 +93,11 @@ function _init()
 	//start session
 	make_session_active();
 	//isset($global_params['session_arguments']['userId']) && !empty($global_params['session_arguments']['userId'])
-        if( isset($global_params['session_arguments']['userId']) && !empty($global_params['session_arguments']['userId']) ) {
+        if( count($global_params['page_arguments']['gtp']) == 0 ) {
+            $page_params['page_dir_file_name'] = "landing/landing";
+            $page_params['template'] = "landingTemp";
+        }
+        elseif( isset($global_params['session_arguments']['userId']) && !empty($global_params['session_arguments']['userId']) ) {
             if( $global_params['page_arguments']['gtp'][0] == "login" && $global_params['page_arguments']['action'] != "logout" ) {
                 $page_params['page_dir_file_name'] = "hotels/waitTime";
                 header("Location: ".HTTP_BASE_PATH.$page_params['page_dir_file_name'].".html");
@@ -111,8 +115,8 @@ function _init()
             //ppr($page_params); ppr($global_params); exit;
         }
         else {
-            //header("location: ".HTTP_BASE_PATH."login.html");
-            //exit;
+            header("location: ".HTTP_BASE_PATH."login.html");
+            exit;
         }
 }
 
