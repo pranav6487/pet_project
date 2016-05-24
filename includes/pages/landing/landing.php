@@ -13,8 +13,12 @@ if( $pageArgs['aj'] == 1 && $pageArgs['action'] == "contactMe" ) {
     $header .= "MIME-Version: 1.0\r\n";
     $header .= "Content-type: text/html\r\n";
     $sendMail = mail(CONTACT_US_EMAIL,$subject,$emailMsg,$header);
-    if( $sendMail !== true ) {
+    if( $sendMail == true ) {
+        echo "success";
+    }
+    else {
         http_response_code(400);
+        echo "fail";
     }
     exit;
 }
