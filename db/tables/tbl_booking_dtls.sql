@@ -15,5 +15,6 @@ CREATE TABLE tbl_booking_dtls
   start_time int(10) unsigned not null,
   end_time int(10) unsigned not null,
   booked_till int(10) unsigned not null,
+  feedback_id int(10) unsigned not null default 0,
   primary key (booking_id)
 );
