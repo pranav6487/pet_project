@@ -14,7 +14,7 @@ if( $pageArgs['aj'] == 1 && $pageArgs['action'] == "contactMe" ) {
     $header .= "MIME-Version: 1.0\r\n";
     $header .= "Content-type: text/html\r\n";
     $sendMail = mail(CONTACT_US_EMAIL,$subject,$emailMsg,$header);
-    return json_encode($sendMail);
+    echo json_encode($sendMail);
     exit;
 }
 ?>
