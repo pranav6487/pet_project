@@ -4,4 +4,5 @@ BEGIN
     truncate tbl_booking_dtls;
     update tbl_party_rest_relation set next_avail_at = 0;
     truncate tbl_customer_dtls;
+    truncate tbl_feedback;
 END;

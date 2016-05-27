@@ -1,7 +1,7 @@
 <?php
 global $global_params;
 global $page_params;
-$page_params['page_title'] = "Wait Time";
+$page_params['page_title'] = "Queue";
 $pageArgs = $global_params['page_arguments'];
 
 $users = new Users();

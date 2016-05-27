@@ -135,7 +135,7 @@ class Restaurant {
     public function getCurrentBookingDtls($restId) {
         $dbObj = new DbConnc(DB_URL);
         $dayStartTime = strtotime(date('Y-m-d') . '10:00:00');
-        $currBookingSql = "select a.booking_id,a.table_id,a.party_rel_id,a.no_of_people,a.wait_list_time,a.seated_time,a.estd_empty_time,a.table_empty_time,a.status,a.booked_till,b.customer_name,b.customer_number from tbl_booking_dtls as a inner join tbl_customer_dtls as b on b.customer_id = a.customer_id where (a.status = ".self::WAITING_STATUS." or a.status = ".self::SEATED_STATUS.") and a.start_time < ".time()." and a.start_time > ".$dayStartTime.";";
+        $currBookingSql = "select booking_dtls.booking_id,booking_dtls.table_id,booking_dtls.party_rel_id,booking_dtls.no_of_people,booking_dtls.wait_list_time,booking_dtls.seated_time,booking_dtls.estd_empty_time,booking_dtls.table_empty_time,booking_dtls.status,booking_dtls.booked_till,customer_dtls.customer_name,customer_dtls.customer_number from tbl_booking_dtls as booking_dtls inner join tbl_customer_dtls as customer_dtls on customer_dtls.customer_id = booking_dtls.customer_id where (booking_dtls.status = ".self::WAITING_STATUS." or booking_dtls.status = ".self::SEATED_STATUS.") and booking_dtls.start_time < ".time()." and booking_dtls.start_time > ".$dayStartTime.";";
         $currBookingDtls = array();
         $waitListDtls = array();
         if( $dbObj->db_query($currBookingSql) ) {
@@ -335,6 +335,144 @@ class Restaurant {
         }
         
         return $return;
+    }
+    
+    public function getSeatedCusts($restId) {
+        $return = array();
+        $dbObj = new DbConnc(DB_URL);
+        $dayStartTime = strtotime(date('Y-m-d') . '10:00:00');
+        $getSeatedCustsSql = "select booking_dtls.booking_id,booking_dtls.table_id,booking_dtls.no_of_people,booking_dtls.feedback_id,customer_dtls.customer_name,customer_dtls.customer_number,table_dtls.table_no from tbl_booking_dtls as booking_dtls inner join tbl_customer_dtls as customer_dtls on customer_dtls.customer_id = booking_dtls.customer_id inner join tbl_table_dtls as table_dtls on table_dtls.table_id = booking_dtls.table_id where booking_dtls.status = ".self::SEATED_STATUS." and booking_dtls.start_time < ".time()." and booking_dtls.start_time > ".$dayStartTime.";";
+        if( $dbObj->db_query($getSeatedCustsSql) ) {
+            while( $rows = $dbObj->db_fetch_array() ) {
+                $seatedCusts[$rows['table_id']] = array("bookingId" => $rows['booking_id'],"noOfPeople" => $rows['no_of_people'],"customerName" => $rows['customer_name'],"customerNumber" => $rows['customer_number'],"tableNo" => $rows['table_no'],"feedBackId" => $rows['feedback_id']);
+            }
+        }
+        else {
+            die("Seems there is some issue. Please try again later");
+        }
+        
+        $tableDtls = $this->getTableDtls($restId);
+        foreach( $tableDtls as $tableId => $tableNo ) {
+            if( !empty($seatedCusts[$tableId]) ) {
+                $return[$tableId] = $seatedCusts[$tableId];
+            }
+            else {
+                $return[$tableId] = array( "tableNo" => $tableNo );
+            }
+        }
+        return $return;
+    }
+    
+    public function getSeatedCustsHtml($restId) {
+        $seatedCusts = $this->getSeatedCusts($restId);
+        $html = "";
+        $i = 0;
+        $noOfTables = count($seatedCusts);
+        foreach( $seatedCusts as $tableId => $bookingDtls ) {
+            $i++;
+            $feedBackLink = "";
+            if( $i == 1 ) {
+                $html .= "<li>";
+            }
+            
+            if( !empty($bookingDtls['bookingId']) && $bookingDtls['feedBackId'] == 0 ) {
+                $feedBackLink = HTTP_BASE_PATH."CustomerFeedback.html?bid=".base64_encode($bookingDtls['bookingId']);
+                $html .= '<button type="button" class="feedBackBtn greenBtn" rel="'.$feedBackLink.'" title="Get Customer Feedback"><i>'.$bookingDtls['tableNo'].'</i><br />'.$bookingDtls['customerName'].' ('.$bookingDtls['noOfPeople'].')</button>&nbsp;';
+            }
+            elseif( !empty($bookingDtls['bookingId']) && $bookingDtls['feedBackId'] != 0 ) {
+                $html .= '<button type="button" class="feedBackBtn greyBtn" rel="done"><i>'.$bookingDtls['tableNo'].'</i><br />'.$bookingDtls['customerName'].' ('.$bookingDtls['noOfPeople'].')</button>&nbsp;';
+            }
+            else {
+                $html .= '<button type="button" class="feedBackBtn greyBtn">'.$bookingDtls['tableNo'].'</button>&nbsp;';
+            }
+            
+            if( $i%4 == 0 || $noOfTables == $i ) {
+                $html .= "</li><li>";
+            }
+            
+            if( $noOfTables == $i ) {
+                $html .= "</li>";
+            }
+        }
+        return $html;
+    }
+    
+    public function isFeedbackTaken($bookingId) {
+        $return = array();
+        $dbObj = new DbConnc(DB_URL);
+        $findBookingSql = "select status,feedback_id from tbl_booking_dtls where booking_id = ".$bookingId;
+        if( $dbObj->db_query($findBookingSql) ) {
+            if( $dbObj->num_rows > 0 ) {
+                while( $rows = $dbObj->db_fetch_array() ) {
+                    $status = $rows['status'];
+                    $feedBackId = $rows['feedback_id'];
+                }
+                
+                if( $status == self::SEATED_STATUS && $feedBackId == 0 ) {
+                    $return['isFeedBackTaken'] = false;
+                }
+                else {
+                    $return['isFeedBackTaken'] = true;
+                    $return['errMsg'] = "Feedback already taken for the selected customer";
+                }
+            }
+            else {
+                $return['isFeedBackTaken'] = true;
+                $return['errMsg'] = "No reservation/booking found";
+            }
+        }
+        return $return;
+    }
+    
+    public function saveFeedBack($pageArgs) {
+        $return = array();
+        $dbObj = new DbConnc(DB_URL);
+        $bookingId = base64_decode($pageArgs['bid']);
+        $getRestIdSql = "select rest_id from tbl_booking_dtls where booking_id = ".$bookingId;
+        if( $dbObj->db_query($getRestIdSql) ) {
+            while( $rows = $dbObj->db_fetch_array() ) {
+                $restId = $rows['rest_id'];
+            }
+        }
+        else {
+            $return['status'] = "fail";
+            return $return;
+        }
+        
+        $saveFeedBack = "insert into tbl_feedback (booking_id,rest_id,ambience,food_qaulity,staff_friendly,cleanliness,service_speed,recommend";
+        if( isset($pageArgs['comments']) && !empty($pageArgs['comments']) ) {
+            $saveFeedBack .= ",comments,created_on)";
+        }
+        else {
+            $saveFeedBack .= ",created_on)";
+        }
+        
+        $saveFeedBack .= " values ({$bookingId},{$restId},{$pageArgs['ambience']},{$pageArgs['foodQuality']},{$pageArgs['staffFriendly']},{$pageArgs['cleanliness']},{$pageArgs['serviceSpeed']},{$pageArgs['recommend']}";
+        
+        if( isset($pageArgs['comments']) && !empty($pageArgs['comments']) ) {
+           $saveFeedBack .= ",{$pageArgs['comments']},".time().");"; 
+        }
+        else {
+           $saveFeedBack .= ",".time().");";  
+        }
+        
+        if( $dbObj->db_query($saveFeedBack) ) {
+            $feedBackId = $dbObj->lastInsertId;
+        }
+        else {
+            $return['status'] = "fail";
+            return $return;
+        }
+        
+        $updateBooking = "update tbl_booking_dtls set feedback_id = {$feedBackId} where booking_id = {$bookingId};";
+        if( $dbObj->db_query($updateBooking) ) {
+            $return['status'] = "success";
+            return $return;
+        }
+        else {
+            $return['status'] = "fail";
+            return $return;
+        }
     }
 }
 ?>

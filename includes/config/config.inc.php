@@ -93,6 +93,9 @@ define("SESSION_REST_ID","restId");
 
 define("CONTACT_US_EMAIL","pranav6487@gmail.com");
 
+define("LANDING_PAGE_TEMPLATE","landingTemp");
+define("FEEDBACK_PAGE_TEMPLATE","custFeedBack");
+
 require_once CONFIG_DIR."pages.inc.php";
 require_once FUNCTIONS_DIR . "common.functions.inc.php";
 

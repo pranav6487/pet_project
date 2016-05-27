@@ -11,6 +11,10 @@ $(document).ready(function() {
     $('body').on("click","#sbmtQuery", function(){
         contactMail();
     });
+    
+    $('body').on("click",".feedBackBtn",function(){
+       getFeedBack($(this)); 
+    });
 });
 
 function loginFrm() {
@@ -164,4 +168,17 @@ function contactMail() {
             $("#errMsgLi").css("display","none");
         },1000*15);
     });
+}
+
+function getFeedBack(ele) {
+    var href = ele.attr("rel");
+    if( typeof href !== "undefined" && href != "done" ) {
+        window.open(href,"_blank");
+    }
+    else if( typeof href !== "undefined" && href == "done" ) {
+        alert("Feedback taken");
+    }
+    else {
+        alert("No customer seated at this table currently");
+    }
 }
