@@ -474,5 +474,114 @@ class Restaurant {
             return $return;
         }
     }
+    
+    public function getPerformanceData($restId) {
+        $return = array();
+        $dbObj = new DbConnc(DB_URL);
+        $currentTime = time();
+        $currentDayStart = $dayStartTime = strtotime(date('Y-m-d') . '10:00:00');
+        $yesterdayStart = strtotime( date("Y-m-d", strtotime("yesterday")) . "10:00:00" );
+        $thisWeekMonday = strtotime( date("Y-m-d", strtotime("monday this week")) . "10:00:00" );
+        $lastWeekMonday = strtotime( date("Y-m-d", strtotime("monday last week")) . "10:00:00" );
+        $todayData = $yesterdayData = $thisWeekData = $lastWeekData = array();
+        
+        $getLastWeekFeedback = "select booking_id,ambience,food_qaulity,staff_friendly,cleanliness,service_speed,recommend,created_on from tbl_feedback where created_on >= ".$lastWeekMonday;
+        //echo $getLastWeekFeedback; exit;
+        if( $dbObj->db_query($getLastWeekFeedback) ) {
+            if( $dbObj->num_rows > 0 ) {
+                while( $rows = $dbObj->db_fetch_array() ) {
+                    $data = array( "bookingId" => $rows['booking_id'], "ambience" => $rows['ambience'], "foodQuality" => $rows['food_qaulity'], "staffFriendly" => $rows['staff_friendly'], "cleanliness" => $rows['cleanliness'], "serviceSpeed" => $rows['service_speed'], "recommend" => $rows['recommend'] );
+                    
+                    if( $rows['created_on'] >= $currentDayStart && $rows['created_on'] <= $currentTime ) {
+                        $todayData[] = $data;
+                    }
+                    
+                    if( $rows['created_on'] >= $yesterdayStart && $rows['created_on'] < $currentDayStart ) {
+                        $yesterdayData[] = $data;
+                    }
+                    
+                    if( $rows['created_on'] >= $thisWeekMonday && $rows['created_on'] <= $currentTime ) {
+                        $thisWeekData[] = $data;
+                    }
+                    
+                    if( $rows['created_on'] >= $lastWeekMonday && $rows['created_on'] < $thisWeekMonday ) {
+                        $lastWeekData[] = $data;
+                    }
+                }
+            }
+            else {
+                $return['status'] = "fail";
+                $return['errMsg'] = "No data found";
+            }
+            //ppr($todayData);ppr($yesterdayData);ppr($thisWeekData);ppr($lastWeekData);exit;
+            
+            $todayScore = $yesterdayScore = $thisWeekScore = $lastWeekScore = array("ambience" => 0, "foodQuality" => 0, "staffFriendly" => 0, "cleanliness" => 0, "serviceSpeed" => 0, "npsScore" => 0);
+            //For Today's Performance
+            if( !empty($todayData) ) {
+                $todayScore = $this->getRatingAvgNpsScore($todayData);
+            }
+            
+            if( !empty( $yesterdayData ) ) {
+                $yesterdayScore = $this->getRatingAvgNpsScore($yesterdayData);
+            }
+            
+            if( !empty($thisWeekData) ) {
+                $thisWeekScore = $this->getRatingAvgNpsScore($thisWeekData);
+            }
+            
+            if( !empty($lastWeekData) ) {
+                $lastWeekScore = $this->getRatingAvgNpsScore($lastWeekData);
+            }
+            
+            $return['todayScore'] = $todayScore;
+            $return['yesterdayScore'] = $yesterdayScore;
+            $return['thisWeekScore'] = $thisWeekScore;
+            $return['lastWeekScore'] = $lastWeekScore;
+            $return['status'] = "success";
+        }
+        else {
+            $return['status'] = "fail";
+            $return['errMsg'] = "There seems to be some problem. Please try again later";
+        }
+        //ppr($return);exit;
+        return $return;
+    }
+    
+    public function getRatingAvgNpsScore($data) {
+        $return = array();
+        $ambience = $foodQuality = $staffFriendly = $cleanliness = $serviceSpeed = $promoters = $detractors = $recommend = 0;
+        $count = count($data);
+        $promoterRating = array(9,10);
+        $detractorRating = array(0,1,2,3,4,5,6);
+        foreach( $data as $dataPoints ) {
+            $ambience += $dataPoints['ambience'];
+            $foodQuality += $dataPoints['foodQuality'];
+            $staffFriendly += $dataPoints['staffFriendly'];
+            $cleanliness += $dataPoints['cleanliness'];
+            $serviceSpeed += $dataPoints['serviceSpeed'];
+            
+            if( in_array($dataPoints['recommend'],$promoterRating) ) {
+                $promoters++;
+            }
+            
+            if( in_array( $dataPoints['recommend'],$detractorRating ) ) {
+                $detractors++;
+            }
+        }
+        
+        $return['ambience'] = $ambience/$count;
+        $return['foodQuality'] = $foodQuality/$count;
+        $return['staffFriendly'] = $staffFriendly/$count;
+        $return['cleanliness'] = $cleanliness/$count;
+        $return['serviceSpeed'] = $serviceSpeed/$count;
+        $promotersPerc = ($promoters/$count)*100;
+        $detractorsPerc = ($detractors/$count)*100;
+        $return['npsScore'] = $promotersPerc - $detractorsPerc;
+        return $return;
+    }
+    
+    public function getNpsScore($data) {
+        
+    }
 }
 ?>

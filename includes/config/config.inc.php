@@ -90,6 +90,7 @@ define("ALLOWED_DECIMAL_WITHOUT_HYPHEN","/^(\d)?(\d|,)*\.?\d*$/");
 define("SESSION_USER_ID","userId");
 define("SESSION_USER_TYPE","userType");
 define("SESSION_REST_ID","restId");
+define("SESSION_REST_NAME","restName");
 
 define("CONTACT_US_EMAIL","pranav6487@gmail.com");
 

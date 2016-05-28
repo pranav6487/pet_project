@@ -69,7 +69,7 @@ window.ALLOWED_DECIMAL_WITHOUT_HYPHEN=<?php echo ALLOWED_DECIMAL_WITHOUT_HYPHEN;
 					<li><a href="/hotels/feedback.html" title="Feedback">Feedback</a></li>
                                         <li><a href="/hotels/manageRest.html" title="Manage">Manage</a></li>
 					<li><a href="/hotels/contact.html" title="Contact">Contact</a></li>
-                                        <li><a href="javascript:void(0);" title="Logout" id="logoutHref">Logout</a></li>
+                                        <!-- <li><a href="javascript:void(0);" title="Logout" id="logoutHref">Logout</a></li> -->
 				</ul>
 			</nav>
 		</div>
@@ -77,11 +77,11 @@ window.ALLOWED_DECIMAL_WITHOUT_HYPHEN=<?php echo ALLOWED_DECIMAL_WITHOUT_HYPHEN;
 	
 	<!-- Title incl. Logo & Social Media Buttons -->
 	<section id="title">
-		<h1><a href="/shop/shop.html" title="Logo"><img src="<?php echo IMAGE_URL;?>logo.png" alt="Logo" /></a></h1>
-		<ul>
+		<h1><?php echo $_SESSION[SESSION_REST_NAME]; ?></h1>
+		<!-- <ul>
 			<li class="twitter"><a href="http://twitter.com/" title="Twitter">Twitter</a></li>
 			<li class="facebook"><a href="http://facebook.com/" title="Facebook">Facebook</a></li>
-		</ul>
+		</ul> -->
 	</section>
     <?php } ?>
 	<section id="content">
@@ -94,13 +94,14 @@ if(file_exists($tpl_path))
 	</section>
 		<!-- Footer incl. Copyright and Secondary Navigation -->
 	<footer>
-		<p><b>Copyright &copy; 2012 Pranav Thakker</b> All Rights Reserved.</p>
+		<p><b>Copyright &copy; 2016 ManageMyResto</b> All Rights Reserved.</p>
 		<nav>
 			<ul>
-				<li><a href="/shop/shop.html" title="Shop">Shop</a></li>
-				<li><a href="/shop/cart.html" title="Cart">Cart</a></li>
-				<li><a href="javascrip:void(0);" title="Blog">Blog</a></li>
-				<li><a href="javascrip:void(0);" title="About">About</a></li>
+				<li><a href="/hotels/waitTime.html" title="Queue">Queue</a></li>
+                                <li><a href="/hotels/feedback.html" title="Feedback">Feedback</a></li>
+                                <li><a href="/hotels/manageRest.html" title="Manage">Manage</a></li>
+                                <li><a href="/hotels/contact.html" title="Contact">Contact</a></li>
+                                <li><a href="javascript:void(0);" title="Logout" id="logoutHref">Logout</a></li>
 			</ul>
 		</nav>
 	</footer>

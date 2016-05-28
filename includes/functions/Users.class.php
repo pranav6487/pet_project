@@ -22,7 +22,7 @@ class Users {
     public function signIn( $email, $passwd ) {
         $encryptPasswd = md5($passwd);
         $dbObj = new DbConnc(DB_URL);
-        $findUser = "select user_id,user_type,rest_id from tbl_users where user_email = '{$email}' and user_passwd = '{$encryptPasswd}' and status = 1;";
+        $findUser = "select users.user_id,users.user_type,users.rest_id,rest_dtls.rest_name from tbl_users as users inner join tbl_restaurant_dtls as rest_dtls on users.rest_id = rest_dtls.rest_id where users.user_email = '{$email}' and users.user_passwd = '{$encryptPasswd}' and users.status = 1;";
         $return = array();
         if( $dbObj->db_query($findUser) ) {
             if( $dbObj->num_rows > 0 ) {
@@ -30,11 +30,13 @@ class Users {
                 $return['userId'] = $rows['user_id'];
                 $return['userType'] = $rows['user_type'];
                 $return['restId'] = $rows['rest_id'];
+                $return['restName'] = $rows['rest_name'];
                 $return['status'] = 1;
                 //Set session
                 $_SESSION[SESSION_USER_ID] = $return['userId'];
                 $_SESSION[SESSION_USER_TYPE] = $return['userType'];
                 $_SESSION[SESSION_REST_ID] = $return['restId'];
+                $_SESSION[SESSION_REST_NAME] = $return['restName'];
                 $return['redHref'] = "/hotels/waitTime.html";
             }
             else {
