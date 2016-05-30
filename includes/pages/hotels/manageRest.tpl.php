@@ -50,6 +50,10 @@ if( $_SESSION[SESSION_USER_TYPE] == $users::SUPER_USER ) {
                     <input class="required numeric" id="restManagerNum" name="restManagerNum" value="" maxlength="10" type="text" />
                 </li>
                 <li>
+                    Manager email*:
+                    <input class="required email" id="restManagerEmail" name="restManagerEmail" value="" type="text" />
+                </li>
+                <li>
                     Contact Name 1*:
                     <input class="required" id="restContactName1" name="restContactName1" value="" type="text"/>
                 </li>
@@ -58,12 +62,20 @@ if( $_SESSION[SESSION_USER_TYPE] == $users::SUPER_USER ) {
                     <input class="required numeric" id="restContactNum1" name="restContactNum1" value="" maxlength="10" type="text" />
                 </li>
                 <li>
+                    Contact Email 1*:
+                    <input class="required email" id="restContactEmail1" name="restContactEmail1" value="" type="text" />
+                </li>
+                <li>
                     Contact Name 2:
                     <input id="restContactName2" name="restContactName2" value="" maxlength="10" type="text"/>
                 </li>
                 <li>
                     Contact Num 2:
                     <input class="numeric" id="restContactNum2" name="restContactNum2" value="" maxlength="10" type="text"/>
+                </li>
+                <li>
+                    Contact Email 2:
+                    <input class="email" id="restContactEmail2" name="restContactEmail2" value="" type="text"/>
                 </li>
                 <li>
                     Login email*:

@@ -95,6 +95,9 @@ if(file_exists($tpl_path))
 		<!-- Footer incl. Copyright and Secondary Navigation -->
 	<footer>
 		<p><b>Copyright &copy; 2016 ManageMyResto</b> All Rights Reserved.</p>
+                <?php 
+                if( $global_params['page_arguments']['gtp'][0] != "login" ) {
+                ?>
 		<nav>
 			<ul>
 				<li><a href="/hotels/waitTime.html" title="Queue">Queue</a></li>
@@ -104,6 +107,9 @@ if(file_exists($tpl_path))
                                 <li><a href="javascript:void(0);" title="Logout" id="logoutHref">Logout</a></li>
 			</ul>
 		</nav>
+                <?php 
+                }
+                ?>
 	</footer>
 </body>
 </html>

@@ -16,10 +16,13 @@ class ManageRest {
                 "restCoEmail" => "rest_contact_email",
                 "restManagerName" => "rest_manager_name",
                 "restManagerNum" => "rest_manager_num",
+                "restManagerEmail" => "rest_manager_email",
                 "restContactName1" => "rest_contact1_name",
                 "restContactNum1" => "rest_contact1_num",
+                "restContactEmail1" => "rest_contact1_email",
                 "restContactName2" => "rest_contact2_name",
-                "restContactNum2" => "restContactNum2"
+                "restContactNum2" => "rest_contact2_num",
+                "restContactEmail2" => "rest_contact2_email"
             ),
             "key" => "rest_id"
         );
